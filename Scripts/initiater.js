@@ -101,8 +101,7 @@ class Grid_maker {
         this.mainContainer.style.display = 'flex';
         this.mainContainer.style.flexDirection = 'column';
         this.addNewRow();       
-        this.addResizeHandles();
-        this.handleResize();
+       
         this.borderHighlighter = new ExcelBorderHighlighter(this.mainContainer);
         document.querySelector('form').addEventListener('submit', (e) => this.handleFileUpload(e));
         // Add event listeners to buttons
@@ -159,6 +158,8 @@ class Grid_maker {
         const excel = new Excel(row, this.currentRowCount, 1,this);
         this.rowArr[this.currentRowCount - 1] = [excel];
         this.mainContainer.appendChild(row);
+        this.addResizeHandles();
+        this.handleResize();
     }
 
     addNewCol(rowNum) {
@@ -173,6 +174,8 @@ class Grid_maker {
         const row = document.getElementById(`row_${rowNum}`);
         const excel = new Excel(row, rowNum, colCount,this);
         this.rowArr[rowNum - 1].push(excel);
+        this.addResizeHandles();
+        this.handleResize();
     }
 
     addResizeHandles() {
