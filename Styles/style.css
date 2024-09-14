@@ -10,46 +10,132 @@ html {
 body {
   font-family: Arial, sans-serif;
 }
+body #ribbon-container {
+  background-color: #f5faf7;
+  height: 10vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+}
+body .progress {
+  display: none;
+  position: relative;
+  background-color: #f5faf7;
+  top: 0px;
+  height: 1.25vh;
+  border-radius: 0;
+}
+body .progress .progress-bar {
+  background-color: #107C41;
+  font-size: 9px;
+  height: 100%;
+}
+body .tab-list-container {
+  margin-top: 5px;
+  display: flex;
+  justify-content: start;
+  flex-direction: row;
+  padding-left: 20px;
+  margin-bottom: 5px;
+}
+body .tab-list-container .tab-list-container-items {
+  margin-right: 10px;
+  font-size: small;
+  padding: 5px;
+  cursor: pointer;
+}
+body .tab-list-container .tab-list-container-items:hover, body .tab-list-container .tab-list-container-items.active {
+  border-bottom: 2px solid #107C41;
+}
+body .focus-zone {
+  margin: 0 7px;
+  padding: 5px;
+  font-size: small;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #107C41;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  border-radius: 50px;
+}
+body .focus-zone .focus-zone-inner {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+body .focus-zone .focus-zone-inner .focus-zone-input-btn {
+  height: -moz-max-content;
+  height: max-content;
+}
+body .focus-zone .focus-zone-inner .focus-zone-inner-btn {
+  background-color: #ffffff;
+  color: #000000;
+  border-radius: 5px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  padding: 5px;
+  cursor: pointer;
+}
+body .focus-zone .focus-zone-inner .focus-zone-inner-btn-left {
+  border-radius: 14px 5px 5px 14px;
+  margin-left: 2px;
+  margin-right: 5px;
+}
+body .focus-zone .focus-zone-inner .focus-zone-inner-btn-middle {
+  border-radius: 5px 5px 5px 5px;
+  margin-right: 5px;
+}
+body .focus-zone .focus-zone-inner .focus-zone-inner-btn-right {
+  border-radius: 5px 14px 14px 5px;
+}
+body .focus-zone .focus-zone-inner .focus-zone-left {
+  display: flex;
+  flex-direction: row;
+}
+body .focus-zone .focus-zone-inner .focus-zone-left .focus-file,
+body .focus-zone .focus-zone-inner .focus-zone-left .focus-operations,
+body .focus-zone .focus-zone-inner .focus-zone-left .focus-graph {
+  display: none;
+}
+body .focus-zone .focus-zone-inner .focus-zone-left .focus-file.active,
+body .focus-zone .focus-zone-inner .focus-zone-left .focus-operations.active,
+body .focus-zone .focus-zone-inner .focus-zone-left .focus-graph.active {
+  display: flex;
+  align-items: center;
+}
+body .focus-zone .focus-zone-inner .focus-zone-left .file-upload-btn {
+  color: #ffffff;
+  background-color: #107C41;
+  height: 30px;
+  border: none;
+  padding: 5px;
+  border-radius: 30px;
+}
+body .focus-zone .focus-zone-inner .focus-zone-left .focus-operations,
+body .focus-zone .focus-zone-inner .focus-zone-left .focus-graph {
+  margin-left: 3px;
+}
+body .focus-zone .focus-zone-inner .focus-zone-right {
+  display: flex;
+  flex-direction: row;
+}
 body > header {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  height: 18%;
+  height: 10%;
   box-sizing: border-box;
-}
-body > header .search-container {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-body > header .search-container #search-input {
-  padding: 0.5rem;
-  border-radius: 4px;
-  border: 1px solid #ced4da;
-  font-size: 1rem;
-  min-width: 200px;
-}
-body > header .search-container #search-input:focus {
-  outline: none;
-  border-color: #007bff;
-}
-body > header .search-container #search-btn {
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  font-size: 1rem;
-  cursor: pointer;
-}
-body > header .search-container #search-btn:hover {
-  background-color: #0056b3;
+  display: none;
 }
 body .mainContainer {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  height: 80%;
+  height: 90vh;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -219,8 +305,10 @@ body .mainContainer .row .row-resize-handle {
 body .main-footer {
   height: 2%;
   display: flex;
-  justify-content: flex-end; /* Ensure buttons align to the right */
-  align-items: center; /* Vertically center the buttons */
+  justify-content: flex-end;
+  /* Ensure buttons align to the right */
+  align-items: center;
+  /* Vertically center the buttons */
   overflow: hidden;
   margin: 0;
   padding: 0;
@@ -352,6 +440,7 @@ body .main-footer .add-new-col {
   cursor: pointer;
   white-space: nowrap;
   position: relative;
+  font-size: small;
 }
 .excelWrapper .sheet-bar .sheet-tabs .sheet-tab .close-tab {
   position: absolute;
@@ -411,7 +500,8 @@ body .main-footer .add-new-col {
   margin-bottom: 10px;
 }
 
-.popup th, .popup td {
+.popup th,
+.popup td {
   border: 1px solid #ddd;
   padding: 8px;
 }
@@ -448,7 +538,8 @@ table#search-results {
   margin-top: 2px;
   border-collapse: collapse;
 }
-table#search-results th, table#search-results td {
+table#search-results th,
+table#search-results td {
   padding: 1px;
   border: 1px solid #ccc;
 }
