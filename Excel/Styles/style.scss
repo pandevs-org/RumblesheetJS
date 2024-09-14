@@ -1,0 +1,521 @@
+@mixin resetCss {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+@mixin centerFlex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+body,
+html {
+    @include resetCss();
+    height: 100vh;
+    width: 100vw;
+    
+}
+
+body {
+    font-family: Arial, sans-serif;
+
+    > header {
+        @include resetCss();
+        height: 18%;
+        box-sizing: border-box;
+       
+    .search-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+  
+        #search-input {
+          padding: 0.5rem;
+          border-radius: 4px;
+          border: 1px solid #ced4da;
+          font-size: 1rem;
+          min-width: 200px;
+  
+          &:focus {
+            outline: none;
+            border-color: #007bff;
+          }
+        }
+  
+        #search-btn {
+          background-color: #007bff;
+          color: #fff;
+          border: none;
+          padding: 0.5rem 1rem;
+          border-radius: 4px;
+          font-size: 1rem;
+          cursor: pointer;
+  
+          &:hover {
+            background-color: #0056b3;
+          }
+        }}
+    }
+
+    .mainContainer {
+        @include resetCss();
+        height: 80%;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        background-color: aliceblue;
+
+        .row {
+            @include resetCss();
+            display: flex;
+            min-height: 50px;
+            position: relative;
+            overflow: hidden; // Ensure this does not restrict resizing
+        
+            .excel.resizable {
+                @include resetCss();
+                border: 1px solid #ccc;
+                //padding: 2px;
+                position: relative;
+                transition: width 0.3s ease, height 0.3s ease;
+                flex: none; // Ensure flex does not override manual sizing
+                min-width: 50px;
+                min-height: 50px;
+                display: flex;
+                flex-direction: column;
+
+                &::after {
+                    content: '';
+                    position: absolute;
+                    right: 0;
+                    bottom: 0;
+                    width: 10px;
+                    height: 10px;
+                    background: #000;
+                    opacity: 0;
+                    cursor: nwse-resize;
+                }
+
+                &:hover::after {
+                    opacity: 0.2;
+                }
+
+                .topSection {
+                    height: 20px;
+                }
+
+                .middleSection {
+                    flex: 1;
+                    display: flex;
+                    position: relative;
+                    overflow: hidden;
+
+                    .verticalCanvas {
+                        width: 30px; // Adjust as needed
+                        height: calc(100% - 10px);
+                        position: relative; // Ensuring position is relative
+
+                        canvas {
+                            width: 100%;
+                            height: 100%;
+                        }
+
+                        .up-arrow-button {
+                            position: absolute;
+                            bottom: 0;
+                            width: 100%;
+                            height: 20px;
+                            cursor: pointer;
+                            background: #f0f0f0;
+                            border-top: 1px solid #ccc;
+                            text-align: center;
+                            font-size: 14px;
+                        }
+
+                        .footer-menu {
+                            display: none;
+                            position: absolute;
+                            bottom: 20px; // Adjust based on arrow button height
+                            width: 100%;
+                            height: 5%; // Adjust height as needed
+                            background: white;
+                            border: 1px solid grey;
+
+                            .sheet-options {
+                                display: flex;
+                                justify-content: space-between;
+                                padding: 5px;
+
+                                span {
+                                    flex: 1;
+                                    text-align: center;
+                                }
+
+                                button {
+                                    background: none;
+                                    border: none;
+                                    cursor: pointer;
+                                    padding: 5px;
+
+                                    &.add-sheet {
+                                        color: green;
+                                    }
+
+                                    &.remove-sheet {
+                                        color: red;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    .fullCanvas {
+                        flex: 1;
+                        position: relative;
+                        overflow: hidden;
+                        background-color: white;
+
+                        .input {
+                            @include resetCss();
+                            display: none;
+                            position: absolute;
+                            border: none;
+                            outline: none;
+                        }
+
+                        .spreadsheetCanvas {
+                            width: calc(100% - 10px); // Leave space for vertical scrollbar
+                            height: calc(100% - 10px); // Leave space for horizontal scrollbar
+                        }
+
+                        .horizontalScroll,
+                        .verticalScroll {
+                            position: absolute;
+                            background: #f0f0f0;
+                        }
+
+                        .horizontalScroll {
+                            bottom: 0;
+                            left: 0;
+                            right: 0;
+                            height: 10px;
+                        }
+
+                        .verticalScroll {
+                            top: 0;
+                            right: 0;
+                            bottom: 10px; // Leave space for horizontal scrollbar
+                            width: 10px;
+                        }
+
+                        .horizontalBar,
+                        .verticalBar {
+                            background: #c0c0c0;
+                            position: absolute;
+                        }
+
+                        .horizontalBar {
+                            height: 100%;
+                        }
+
+                        .verticalBar {
+                            width: 100%;
+                        }
+                    }
+                }
+
+                .col-resize-handle {
+                    position: absolute;
+                    top: 0;
+                    right: -5px;
+                    width: 10px;
+                    height: 100%;
+                    cursor: col-resize;
+                    z-index: 10;
+                }
+            }
+
+            .row-resize-handle {
+                position: absolute;
+                left: 0;
+                bottom: -5px;
+                width: 100%;
+                height: 10px;
+                cursor: row-resize;
+                z-index: 10;
+            }
+        }
+    }
+
+    .main-footer {
+        height: 2%;
+        display: flex;
+        justify-content: flex-end; /* Ensure buttons align to the right */
+        align-items: center; /* Vertically center the buttons */
+        overflow: hidden;
+        @include resetCss();
+      
+      
+      .add-new-row {
+        @include resetCss();
+        height: 100%;
+        font-size: 16px;
+      }
+      
+      .add-new-col {
+        @include resetCss();
+        height: 100%;
+        font-size: 100%;
+      }
+    }
+      
+}
+
+.excelWrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+
+    .topSection {
+        display: flex;
+        height: 20px; // Adjust as needed
+
+        .nothing {
+            width: 30px;
+            height: 20px; // Adjust as needed
+        }
+
+        .upperCanvas {
+            flex: 1;
+            position: relative;
+        }
+
+        .horizontalCanvas {
+            width: calc(100% - 10px); // Adjust to leave space for vertical scrollbar
+            height: 100%;
+        }
+    }
+
+    .middleSection {
+        display: flex;
+        flex: 1;
+        position: relative;
+    }
+
+    .verticalCanvas {
+        width: 30px; // Adjust as needed
+        position: relative;
+
+        canvas {
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    .fullCanvas {
+        flex: 1;
+        position: relative;
+
+        .spreadsheetCanvas {
+            width: calc(100% - 10px); // Leave space for vertical scrollbar
+            height: calc(100% - 10px); // Leave space for horizontal scrollbar
+        }
+
+        .verticalScroll,
+        .horizontalScroll {
+            position: absolute;
+            background: #f0f0f0;
+        }
+
+        .verticalScroll {
+            right: 0;
+            top: 0;
+            width: 10px; // Adjust as needed
+            height: calc(100% - 10px); // Adjust for horizontal scrollbar
+        }
+
+        .horizontalScroll {
+            bottom: 0;
+            left: 0;
+            width: calc(100% - 10px); // Adjust for vertical scrollbar
+            height: 10px; // Adjust as needed
+        }
+
+        .verticalBar,
+        .horizontalBar {
+            position: absolute;
+            background: #c0c0c0;
+            border-radius: 5px;
+        }
+
+        .verticalBar {
+            width: 100%;
+            height: 50%; // Adjust based on content
+            top: 0;
+        }
+
+        .horizontalBar {
+            height: 100%;
+            width: 50%; // Adjust based on content
+            left: 0;
+        }
+    }
+
+    .sheet-bar {
+        display: flex;
+        align-items: center;
+        height: 24px;
+        background-color: #f1f1f1;
+        border-top: 1px solid #e0e0e0;
+
+        .sheet-controls {
+            display: flex;
+            align-items: center;
+            padding: 0 5px;
+
+            button {
+                background: none;
+                border: none;
+                cursor: pointer;
+                font-size: 16px;
+                padding: 2px 5px;
+                color: #5f6368;
+
+                &:hover {
+                    background-color: #e0e0e0;
+                }
+            }
+        }
+
+        .sheet-tabs {
+            display: flex;
+            overflow-x: auto;
+            flex-grow: 1;
+
+            .sheet-tab {
+                padding: 3px 10px;
+                border-right: 1px solid #e0e0e0;
+                background-color: #f1f1f1;
+                cursor: pointer;
+                white-space: nowrap;
+                position: relative;
+                
+                .close-tab {
+                    position: absolute;
+                    right: -5px;
+                    top: 5px;
+                    transform: translateY(-50%);
+                    background: none;
+                    border: none;
+                    color: red;
+                    cursor: pointer;
+                    font-size: 12px;
+                }
+
+                &.active {
+                    background-color: #fff;
+                    border-bottom: 2px solid #1a73e8;
+                }
+
+                &:hover {
+                    background-color: #e0e0e0;
+                }
+            }
+        }
+
+        .sheet-scroll {
+            display: flex;
+            align-items: center;
+            padding: 0 5px;
+
+            button {
+                background: none;
+                border: none;
+                cursor: pointer;
+                font-size: 16px;
+                padding: 2px 5px;
+                color: #5f6368;
+
+                &:hover {
+                    background-color: #e0e0e0;
+                }
+            }
+        }
+    }
+}
+
+.contentArea {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+.popup table {
+    border-collapse: collapse;
+    margin-bottom: 10px;
+}
+
+.popup th, .popup td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.popup th {
+    background-color: #f2f2f2;
+}
+
+/* graph */
+.graph {
+    display: none;
+    height: -moz-fit-content;
+    height: fit-content;
+    width: 500px;
+    position: absolute;
+    top: 340px;
+    left: 35%;
+    border: 1px dotted;
+    padding: 30px;
+    background-color: white;
+    border-radius: 10px;
+    z-index: 1000;
+  }
+  .graph-close {
+    position: absolute;
+    border-radius: 5px;
+    right: 5px;
+    top: 5px;
+  }
+
+
+
+table#search-results {
+  width: 100%;
+  margin-top: 2px;
+  border-collapse: collapse;
+
+  th, td {
+    padding: 1px;
+    border: 1px solid #ccc;
+  }
+
+  th {
+    background-color: #f1f1f1;
+  }
+}
+
