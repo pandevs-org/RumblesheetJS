@@ -1,7 +1,7 @@
 class Node {
-    constructor(rowValue, colValue, value, nextRow = null, nextCol = null, prevCol = null, prevRow = null) {
-        this.rowValue = rowValue; // Direct row value
-        this.colValue = colValue; // Direct column value
+    constructor(rowValue, colValue, value, nextRow = null, nextCol = null, prevRow = null, prevCol = null) {
+        this.rowValue = rowValue;
+        this.colValue = colValue;
         this.value = value;
         this.nextRow = nextRow;
         this.nextCol = nextCol;
@@ -12,153 +12,149 @@ class Node {
 
 export class SparseMatrix {
     constructor() {
-        this.rowHeaders = {}; // Stores the head of each row linked list
-        this.colHeaders = {}; // Stores the head of each column linked list
+        this.rowHeaders = {}; // Stores the head of each row's linked list
+        this.colHeaders = {}; // Stores the head of each column's linked list
     }
 
-    // Check if a cell already exists at the given row and column
     _cellExists(row, col) {
         let current = this.rowHeaders[row];
         while (current) {
-            if (current.colValue === col) {
-                return true;
-            }
+            if (current.colValue === col) return true;
             current = current.nextCol;
         }
         return false;
     }
 
-    // Insert a cell into the sparse matrix
-    createCell(row, col, value) {
-        if (this._cellExists(row, col)) {
-            return;
+    _shiftRow(row, newRow) {
+        let current = this.rowHeaders[row];
+        while (current) {
+            current.rowValue = newRow;
+            current = current.nextCol;
         }
-
-        let newNode = new Node(row, col, value);
-
-        // Insert into row list
-        if (!this.rowHeaders[row]) {
-            this.rowHeaders[row] = newNode;
-        } else {
-            let current = this.rowHeaders[row];
-            let prev = null;
-            while (current && current.colValue < col) {
-                prev = current;
-                current = current.nextCol;
-            }
-            if (prev) {
-                prev.nextCol = newNode;
-                newNode.prevCol = prev;
-            } else {
-                this.rowHeaders[row] = newNode;
-            }
-            newNode.nextCol = current;
-            if (current) {
-                current.prevCol = newNode;
-            }
-        }
-
-        // Insert into column list
-        if (!this.colHeaders[col]) {
-            this.colHeaders[col] = newNode;
-        } else {
-            let current = this.colHeaders[col];
-            let prev = null;
-            while (current && current.rowValue < row) {
-                prev = current;
-                current = current.nextRow;
-            }
-            if (prev) {
-                prev.nextRow = newNode;
-                newNode.prevRow = prev;
-            } else {
-                this.colHeaders[col] = newNode;
-            }
-            newNode.nextRow = current;
-            if (current) {
-                current.prevRow = newNode;
-            }
-        }
+        this.rowHeaders[newRow] = this.rowHeaders[row];
+        delete this.rowHeaders[row];
     }
 
-    // Shift cells to the right
-    _shiftCellsRight(row, col) {
+    _shiftColumn(col, newCol) {
+        let current = this.colHeaders[col];
+        while (current) {
+            current.colValue = newCol;
+            current = current.nextRow;
+        }
+        this.colHeaders[newCol] = this.colHeaders[col];
+        delete this.colHeaders[col];
+    }
+
+    _insertNodeInRow(row, newNode) {
         let current = this.rowHeaders[row];
         let prev = null;
 
-        while (current && current.colValue < col) {
+        while (current && current.colValue < newNode.colValue) {
             prev = current;
             current = current.nextCol;
         }
 
-        while (current) {
-            let newColValue = current.colValue + 1;
-            let newNode = new Node(current.rowValue, newColValue, current.value);
-
-            newNode.nextCol = current.nextCol;
+        // Insert node between `prev` and `current`
+        if (prev) {
+            prev.nextCol = newNode;
             newNode.prevCol = prev;
-            if (current.nextCol) current.nextCol.prevCol = newNode;
-            if (prev) prev.nextCol = newNode;
-            else this.rowHeaders[row] = newNode;
+        } else {
+            this.rowHeaders[row] = newNode;
+        }
 
-            let currentInNewCol = this.colHeaders[newColValue];
-            while (currentInNewCol.nextRow && currentInNewCol.nextRow.rowValue < row) {
-                currentInNewCol = currentInNewCol.nextRow;
-            }
-
-            newNode.prevRow = currentInNewCol;
-            newNode.nextRow = currentInNewCol.nextRow;
-            currentInNewCol.nextRow = newNode;
-            if (newNode.nextRow) newNode.nextRow.prevRow = newNode;
-
-            if (current.prevRow) current.prevRow.nextRow = current.nextRow;
-            if (current.nextRow) current.nextRow.prevRow = current.prevRow;
-
-            prev = newNode;
-            current = newNode.nextCol;
+        if (current) {
+            newNode.nextCol = current;
+            current.prevCol = newNode;
         }
     }
 
-    // Shift cells down
-    _shiftCellsDown(row, col) {
+    _insertNodeInColumn(col, newNode) {
         let current = this.colHeaders[col];
         let prev = null;
 
-        while (current && current.rowValue < row) {
+        // Traverse the column and find the right position for the new node
+        while (current && current.rowValue < newNode.rowValue) {
             prev = current;
             current = current.nextRow;
         }
 
-        while (current) {
-            let newRowValue = current.rowValue + 1;
-            let newNode = new Node(newRowValue, current.colValue, current.value);
-
-            newNode.nextRow = current.nextRow;
+        // Insert node between `prev` and `current` in the column
+        if (prev) {
+            prev.nextRow = newNode;
             newNode.prevRow = prev;
-            if (current.nextRow) current.nextRow.prevRow = newNode;
-            if (prev) prev.nextRow = newNode;
-            else this.colHeaders[col] = newNode;
+        } else {
+            this.colHeaders[col] = newNode;
+        }
 
-            let currentInNewRow = this.rowHeaders[newRowValue];
-            while (currentInNewRow.nextCol && currentInNewRow.nextCol.colValue < col) {
-                currentInNewRow = currentInNewRow.nextCol;
-            }
+        if (current) {
+            newNode.nextRow = current;
+            current.prevRow = newNode;
+        }
 
-            newNode.prevCol = currentInNewRow;
-            newNode.nextCol = currentInNewRow.nextCol;
-            currentInNewRow.nextCol = newNode;
-            if (newNode.nextCol) newNode.nextCol.prevCol = newNode;
+        console.log(`Inserted node at col ${col}, row ${newNode.rowValue}`);
+    }
 
-            if (this.rowHeaders[current.rowValue] === current) {
-                this.rowHeaders[current.rowValue] = current.nextCol;
-                if (current.nextCol) current.nextCol.prevCol = null;
-            } else {
-                if (current.prevCol) current.prevCol.nextCol = current.nextCol;
-                if (current.nextCol) current.nextCol.prevCol = current.prevCol;
-            }
+    _shiftCellsRight(row, col) {
+        let current = this.rowHeaders[row];
+        while (current && current.colValue < col) current = current.nextCol;
 
-            prev = newNode;
-            current = newNode.nextRow;
+        while (current) {
+            this._shiftColumn(current.colValue, current.colValue + 1);
+            current = current.nextCol;
+        }
+    }
+
+    _shiftCellsDown(row, col) {
+        let current = this.colHeaders[col];
+        while (current && current.rowValue < row) current = current.nextRow;
+
+        while (current) {
+            this._shiftRow(current.rowValue, current.rowValue + 1);
+            current = current.nextRow;
+        }
+    }
+
+    addRowInBetween(newRow) {
+        Object.keys(this.rowHeaders).map(Number).sort((a, b) => b - a).forEach(row => {
+            if (row >= newRow) this._shiftRow(row, row + 1);
+        });
+
+        for (let col in this.colHeaders) {
+            const newNode = new Node(newRow, parseInt(col), null);
+            this._insertNodeInColumn(col, newNode);
+        }
+    }
+
+    addColumnInBetween(newCol) {
+        console.log("Before shifting columns:", this.colHeaders);
+        
+        Object.keys(this.colHeaders).map(Number).sort((a, b) => b - a).forEach(col => {
+            if (col >= newCol) this._shiftColumn(col, col + 1);
+        });
+    
+        console.log("After shifting columns:", this.colHeaders);
+        
+        for (let row in this.rowHeaders) {
+            const newNode = new Node(parseInt(row), newCol, null);
+            this._insertNodeInRow(row, newNode);
+            this._insertNodeInColumn(newCol, newNode); // Ensure node is added in both row and column
+        }
+    }
+    
+    createCell(row, col, value) {
+        if (this._cellExists(row, col)) return;
+
+        const newNode = new Node(row, col, value);
+        if (!this.rowHeaders[row]) {
+            this.rowHeaders[row] = newNode;
+        } else {
+            this._insertNodeInRow(row, newNode);
+        }
+
+        if (!this.colHeaders[col]) {
+            this.colHeaders[col] = newNode;
+        } else {
+            this._insertNodeInColumn(col, newNode);
         }
     }
 
@@ -172,103 +168,66 @@ export class SparseMatrix {
         this.createCell(row, col, value);
     }
 
-
-
-    // Getter function to retrieve the value at a specific row and column
     getCell(row, col) {
-        if (!this.rowHeaders[row]) return null;
-
         let current = this.rowHeaders[row];
         while (current) {
-            if (current.colValue === col) {
-                return current.value;
-            }
+            if (current.colValue === col) return current.value;
             current = current.nextCol;
         }
         return null;
     }
 
-    async updateCellsInBackground(data, from) {
-        const worker = new Worker('Scripts/cellworker.js');
-      
-        worker.onmessage = (event) => {
-          const updates = event.data;
-      
-          updates.forEach(update => {
-            this.setCell(update.row, update.col, update.value);
-          });
-        };
-      
-        worker.postMessage({ data, from });
-      }
-    
-    
-
     setCell(row, col, value) {
-        if (!this.rowHeaders[row]) {
-            this.createCell(row, col, value);
+        if (this._cellExists(row, col)) {
+            this._updateCellValue(row, col, value);
         } else {
-            let current = this.rowHeaders[row];
-            while (current) {
-                if (current.colValue === col) {
-                    current.value = value;
-                    return;
-                }
-                if (!current.nextCol || current.nextCol.colValue > col) {
-                    let newNode = new Node(row, col, value, null, current.nextCol, current);
-                    if (current.nextCol) current.nextCol.prevCol = newNode;
-                    current.nextCol = newNode;
-                    break;
-                }
-                current = current.nextCol;
-            }
-        }
-
-        if (!this.colHeaders[col]) {
             this.createCell(row, col, value);
-        } else {
-            let current = this.colHeaders[col];
-            while (current) {
-                if (current.rowValue === row) {
-                    current.value = value;
-                    return;
-                }
-                if (!current.nextRow || current.nextRow.rowValue > row) {
-                    let newNode = new Node(row, col, value, current.nextRow, null, null, current);
-                    if (current.nextRow) current.nextRow.prevRow = newNode;
-                    current.nextRow = newNode;
-                    break;
-                }
-                current = current.nextRow;
-            }
         }
     }
 
-    // Print the matrix by rows
-    printMatrixbyrow() {
+    _updateCellValue(row, col, value) {
+        let current = this.rowHeaders[row];
+        while (current) {
+            if (current.colValue === col) {
+                current.value = value;
+                return;
+            }
+            current = current.nextCol;
+        }
+    }
+
+    printMatrixByRow() {
         for (let row in this.rowHeaders) {
             let current = this.rowHeaders[row];
             let rowValues = [];
             while (current) {
-                rowValues.push(`${current.value}`);
+                rowValues.push(current.value || "null");
                 current = current.nextCol;
             }
-            console.log(rowValues.join(' -> '));
+            console.log(`Row ${row}: ${rowValues.join(' -> ')}`);
         }
     }
 
-    // Print the matrix by columns
-    printMatrixbycol() {
+    printMatrixByColumn() {
         for (let col in this.colHeaders) {
             let current = this.colHeaders[col];
             let colValues = [];
             while (current) {
-                colValues.push(`${current.value}`);
+                colValues.push(current.value || "null");
                 current = current.nextRow;
             }
-            console.log(colValues.join(' -> '));
+            console.log(`Column ${col}: ${colValues.join(' -> ')}`);
         }
     }
+
+    async updateCellsInBackground(data, from) {
+        const worker = new Worker('Scripts/cellworker.js');
+        worker.onmessage = (event) => {
+            const updates = event.data;
+            updates.forEach(update => {
+                this.setCell(update.row, update.col, update.value);
+            });
+        };
+        worker.postMessage({ data, from });
+    }
 }
-
-

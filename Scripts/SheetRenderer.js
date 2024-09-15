@@ -846,17 +846,21 @@ moveRowOrColumn(fromIndex, toIndex, type) {
 
 
 
-updateColumnPositions(startIndex,toIndex) {
-    let currentX = startIndex > 0 ? this.headerCellManager.horizontalHeaderCells[startIndex - 1].x + this.headerCellManager.horizontalHeaderCells[startIndex - 1].width : 0;
-    //console.log(currentX,startIndex,this.headerCellManager.horizontalHeaderCells[startIndex-1])
-    //console.log(toIndex,this.headerCellManager.horizontalHeaderCells[toIndex])
-    for (let i = startIndex; i < toIndex+1; i++) {
-        const cell = this.headerCellManager.horizontalHeaderCells[i];
-        //console.log(cell,currentX,cell.x)
-        cell.x = currentX;
-        currentX += cell.width;
-    }
+updateColumnPositions(startIndex, toIndex) {
+  let currentX = startIndex > 0 ? this.headerCellManager.horizontalHeaderCells[startIndex - 1].x + this.headerCellManager.horizontalHeaderCells[startIndex - 1].width : 0;
+  for (let i = startIndex; i < toIndex + 1; i++) {
+      const cell = this.headerCellManager.horizontalHeaderCells[i];
+      
+      // Update the cell's x position
+      cell.x = currentX;
+      
+      // Update the cell's column index (assuming i is the new column index for each cell)
+      cell.col = i;
+      
+      currentX += cell.width;
+  }
 }
+
 
 updateRowPositions(startIndex) {
     let currentY = startIndex > 0 ? this.headerCellManager.verticalHeaderCells[startIndex - 1].y + this.headerCellManager.verticalHeaderCells[startIndex - 1].height : 0;

@@ -559,6 +559,38 @@ body {
     }
 }
 
+/* General styling for the custom context menu */
+.custom-context-menu {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    cursor: default;
+}
+
+.context-menu-option {
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effect for menu options */
+.context-menu-option:hover {
+    background-color: #f0f0f0;
+    cursor: pointer; /* This ensures the pointer icon on hover */
+}
+
+/* Option for disabled state if needed */
+.context-menu-option.disabled {
+    color: #ccc;
+    pointer-events: none;
+}
+
+/* Add some spacing between the options */
+.context-menu-option:not(:last-child) {
+    margin-bottom: 6px;
+}
+
+
+
 .contentArea {
     flex: 1;
     display: flex;

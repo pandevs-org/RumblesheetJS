@@ -30,9 +30,122 @@ export class HeaderCellFunctionality {
         window.addEventListener('mouseup', this.handleMouseUp.bind(this));
         window.addEventListener('mousemove', this.handleDrag.bind(this));
         
-        // hCanvas.addEventListener('mousedown', this.handleHeaderSelection.bind(this, 'horizontal'));
-        // vCanvas.addEventListener('mousedown', this.handleHeaderSelection.bind(this, 'vertical'));
+        // Add event listeners for right-click (context menu)
+        hCanvas.addEventListener('contextmenu', this.handleRightClick.bind(this, 'horizontal'));
+        vCanvas.addEventListener('contextmenu', this.handleRightClick.bind(this, 'vertical'));
     }
+
+
+    handleRightClick(canvasType, event) {
+        event.preventDefault(); // Prevent the default right-click menu from appearing
+    
+        // Get the mouse position
+        const mouseX = event.clientX;
+        const mouseY = event.clientY;
+
+        const canvas = event.target;
+        const rect = canvas.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        this.isHorizontal = canvasType === 'horizontal';
+        const scrollOffset = this.isHorizontal
+            ? this.sheetRenderer.scrollManager.getScroll().x
+            : this.sheetRenderer.scrollManager.getScroll().y;
+        const cells = this.isHorizontal
+            ? this.sheetRenderer.headerCellManager.getHorizontalHeaderCells(scrollOffset)
+            : this.sheetRenderer.headerCellManager.getVerticalHeaderCells(scrollOffset);
+        const adjustedX = x + scrollOffset
+        const adjustedY = y + scrollOffset
+       
+        const clickedcell = this.getfullClickedHeaderCell(cells, this.isHorizontal ? x + scrollOffset : y + scrollOffset, this.isHorizontal);
+    
+        // Remove any existing context menu before creating a new one
+        const existingMenu = document.querySelector('.custom-context-menu');
+        if (existingMenu) {
+            existingMenu.remove();
+        }
+    
+        // Create a context menu dynamically
+        const contextMenu = document.createElement('div');
+        contextMenu.classList.add('custom-context-menu');
+        contextMenu.style.position = 'absolute';
+        contextMenu.style.top = `${mouseY}px`;
+        contextMenu.style.left = `${mouseX}px`;
+        contextMenu.style.backgroundColor = '#fff';
+        contextMenu.style.border = '1px solid #ccc';
+        contextMenu.style.padding = '10px';
+        contextMenu.style.borderRadius = '4px';
+        contextMenu.style.boxShadow = '0px 4px 8px rgba(0, 0, 0, 0.2)';
+        contextMenu.style.zIndex = '1000'; // Ensure it's on top of other elements
+    
+        // Add menu options based on whether it's horizontal or vertical
+        if (canvasType === 'vertical') {
+            contextMenu.innerHTML = `
+                <div class="context-menu-option" data-action="add-row">➕ Add New Row</div>
+                <div class="context-menu-option" data-action="delete-row">🗑️ Delete Row</div>
+            `;
+        } else if (canvasType === 'horizontal') {
+            contextMenu.innerHTML = `
+                <div class="context-menu-option" data-action="add-column">➕ Add New Column</div>
+                <div class="context-menu-option" data-action="delete-column">🗑️ Delete Column</div>
+            `;
+        }
+    
+        // Append the context menu to the document body
+        document.body.appendChild(contextMenu);
+    
+        // Add event listener to the options
+        contextMenu.addEventListener('click', (e) => {
+            const action = e.target.getAttribute('data-action');
+            this.handleContextMenuAction(action, canvasType ,clickedcell);
+            document.body.removeChild(contextMenu); // Remove the menu after clicking
+        });
+    
+        // Remove the context menu if clicked outside
+        window.addEventListener('click', () => {
+            if (document.body.contains(contextMenu)) {
+                document.body.removeChild(contextMenu);
+            }
+        }, { once: true });
+    }
+    
+
+    handleContextMenuAction(action, canvasType ,clickedcell) {
+        if (action === 'add-row') {
+            // Logic to add a new row
+            console.log(this.cellFunctionality.sheetRenderer.sparseMatrix)
+            this.cellFunctionality.sheetRenderer.sparseMatrix.printMatrixByColumn();
+            console.log("----------------------------------------------------------------")
+            this.cellFunctionality.sheetRenderer.sparseMatrix.printMatrixByRow()
+            console.log("----------------------------------------------------------------")
+
+            this.cellFunctionality.sheetRenderer.sparseMatrix.addRowInBetween(clickedcell.row)
+            console.log(`Adding new row on ${canvasType} ${clickedcell.row} canvas`);
+            this.cellFunctionality.sheetRenderer.sparseMatrix.printMatrixByRow()
+            console.log("----------------------------------------------------------------")
+            this.cellFunctionality.sheetRenderer.sparseMatrix.printMatrixByColumn();
+
+
+            // Your logic for adding a row goes here
+        } else if (action === 'delete-row') {
+            // Logic to delete a row
+            console.log(`Deleting row on ${canvasType} canvas`);
+            // Your logic for deleting a row goes here
+        } else if (action === 'add-column') {
+            // Logic to add a new column
+            console.log(clickedcell.col)
+            this.cellFunctionality.sheetRenderer.sparseMatrix.printMatrixByColumn()
+            this.cellFunctionality.sheetRenderer.sparseMatrix.addColumnInBetween(clickedcell.col)
+            console.log(`Adding new column on ${canvasType} ${clickedcell.col} canvas`);
+            this.cellFunctionality.sheetRenderer.sparseMatrix.printMatrixByColumn()
+            // Your logic for adding a column goes here
+        } else if (action === 'delete-column') {
+            // Logic to delete a column
+            console.log(`Deleting column on ${canvasType} canvas`);
+            // Your logic for deleting a column goes here
+        }
+    }
+    
 
     handleHeaderSelection(direction, event) {
 
@@ -107,8 +220,6 @@ export class HeaderCellFunctionality {
     handleMouseUp(event) {
         this.isDraggingForSelection = false; 
         this.isDragging = false;
-        
-       
 
         // Reset drag state
         this.dragStart = null;
@@ -179,15 +290,28 @@ export class HeaderCellFunctionality {
         }
     }
     
-    
-    getClickedHeaderCell(cells, position, isHorizontal) {
-        //console.log(cells,position)
+    getfullClickedHeaderCell(cells, position, isHorizontal) {
+        // console.log(cells,position)
         for (let i = 0; i <= cells.length; i++) {
             const cell = cells[i];
             const start = isHorizontal ? cell.x  : cell.y ;
             const end = isHorizontal ? cell.x + cell.width : cell.y + cell.height;
             if (position >= start  && position <= end  ) {
-                return isHorizontal ? cells[i].col-1 : cells[i].row-1;
+                return cell;
+            }
+        }
+        return null;
+    }
+
+
+    getClickedHeaderCell(cells, position, isHorizontal) {
+        // console.log(cells,position)
+        for (let i = 0; i <= cells.length; i++) {
+            const cell = cells[i];
+            const start = isHorizontal ? cell.x  : cell.y ;
+            const end = isHorizontal ? cell.x + cell.width : cell.y + cell.height;
+            if (position >= start  && position <= end  ) {
+                return i;
             }
         }
         return null;
