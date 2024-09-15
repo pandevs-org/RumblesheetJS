@@ -8,6 +8,7 @@ class Node {
         this.prevRow = prevRow;
         this.prevCol = prevCol;
         this.textAlign = "center";
+        this.textBaseline = "middle";
         this.fontSize = 14 ;
         this.fontFamily = 'Arial';
         this.color = "black";
