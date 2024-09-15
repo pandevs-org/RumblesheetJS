@@ -1,4 +1,5 @@
 import {Emaker} from './eMaker.js'
+import {RibbonMaker} from './ribbonMaker.js'
 
 
 class ExcelBorderHighlighter {
@@ -72,6 +73,7 @@ class Excel {
         excel.style.flex = '1';
         this.rowContainer.appendChild(excel);
         this.element = excel;
+        new RibbonMaker();
         new Emaker(excel, this.row, this.col,this.Grid_maker);
         
     }

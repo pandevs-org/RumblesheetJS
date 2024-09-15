@@ -245,10 +245,24 @@ adjustRowPosition(targetRow,targetColumnIndex) {
       { passive: false }
     );
 
-    document.getElementById('alignment').addEventListener('change', this.updateTextStyles.bind(this));
+    // document.querySelector('font-bold-btn').addEventListener('click', this.updateTextStyles.bind(this, 'bold'))
+    // document.querySelector('font-italic-btn').addEventListener('click', this.updateTextStyles.bind(this, 'italic'))
+    // document.querySelector('font-strikethrough-btn').addEventListener('click', this.updateTextStyles.bind(this, 'strikethrough'))
+    // document.querySelector('font-underline-btn').addEventListener('click', this.updateTextStyles.bind(this, 'underline'))
+
     document.getElementById('fontSize').addEventListener('input', this.updateTextStyles.bind(this));
+
+    document.querySelector('.horizontal-left-btn').addEventListener('click', this.updateHorizontalAlignment.bind(this, 'left'))
+    document.querySelector('.horizontal-center-btn').addEventListener('click', this.updateHorizontalAlignment.bind(this, 'center'))
+    document.querySelector('.horizontal-right-btn').addEventListener('click', this.updateHorizontalAlignment.bind(this, 'right'))
+
+    document.querySelector('.vertical-top-btn').addEventListener('click', this.updateVerticalAlignment.bind(this, 'top'))
+    document.querySelector('.vertical-middle-btn').addEventListener('click', this.updateVerticalAlignment.bind(this, 'middle'))
+    document.querySelector('.vertical-bottom-btn').addEventListener('click', this.updateVerticalAlignment.bind(this, 'bottom'))
+
     document.getElementById('fontFamily').addEventListener('change', this.updateTextStyles.bind(this));
-    document.getElementById('fontColor').addEventListener('input', this.updateTextStyles.bind(this));
+    document.getElementById('text-color-picker').addEventListener('input', this.updateTextStyles.bind(this));
+    // document.getElementById('fill-color.picker').addEventListener('input', this.updateTextStyles.bind(this))
   }
 
   handleResize() {
@@ -539,9 +553,6 @@ adjustRowPosition(targetRow,targetColumnIndex) {
   }
 
 
- 
-  
-
   
   drawGrid(scrollX, scrollY) {
     const ctx = this.contexts.spreadsheet;
@@ -642,21 +653,40 @@ adjustRowPosition(targetRow,targetColumnIndex) {
     }
   }
   
-
-  updateTextStyles() {
-    const alignment = document.getElementById('alignment').value;
-    const fontSize = document.getElementById('fontSize').value;
-    const fontFamily = document.getElementById('fontFamily').value;
-    const fontColor = document.getElementById('fontColor').value;
-  
-    // Assuming `sheetRenderer` is your instance of SheetRenderer and `selectedCells` is an array of selected cells
+  updateHorizontalAlignment(alignment) {
+    console.log(alignment)
     if (this.cellFunctionality.selectedCells) {
       this.cellFunctionality.selectedCells.forEach(cell => {
         // Apply styles to each selected cell
         console.log(cell.node)
         cell.node.textAlign = alignment;
-        cell.node.fontSize = `${fontSize}`;
-        cell.node.fontFamily = fontFamily;
+      });
+    }
+  }
+
+  updateVerticalAlignment(alignment) {
+    if (this.cellFunctionality.selectedCells) {
+      this.cellFunctionality.selectedCells.forEach(cell => {
+        // Apply styles to each selected cell
+        console.log(cell.node)
+        cell.node.textBaseline = alignment;
+      });
+    }
+  }
+
+  updateTextStyles(fontWeight) {
+    // const fontSize = document.getElementById('fontSize').value;
+    const fontFamily = document.getElementById('fontFamily').value;
+    const fontColor = document.getElementById('text-color-picker').value;
+  
+    console.log(fontColor)
+    // Assuming `sheetRenderer` is your instance of SheetRenderer and `selectedCells` is an array of selected cells
+    if (this.cellFunctionality.selectedCells) {
+      this.cellFunctionality.selectedCells.forEach(cell => {
+        // Apply styles to each selected cell
+        console.log(cell.node)
+        // cell.node.fontSize = `${fontSize}`;
+        cell.node.fontFamily = `${fontFamily}`;
         cell.node.color = fontColor;
       });
     }

@@ -64,6 +64,12 @@ body .focus-zone .focus-zone-inner {
   justify-content: space-between;
   align-items: center;
 }
+body .focus-zone .focus-zone-inner .focus-zone-inner-seperator {
+  background-color: #e0e0e0;
+  margin-left: 5px;
+  height: 22px;
+  width: 2px;
+}
 body .focus-zone .focus-zone-inner .focus-zone-input-btn {
   height: -moz-max-content;
   height: max-content;
@@ -71,7 +77,6 @@ body .focus-zone .focus-zone-inner .focus-zone-input-btn {
 body .focus-zone .focus-zone-inner .focus-zone-inner-btn {
   background-color: #ffffff;
   color: #000000;
-  border-radius: 5px;
   height: 30px;
   display: flex;
   justify-content: center;
@@ -80,27 +85,33 @@ body .focus-zone .focus-zone-inner .focus-zone-inner-btn {
   padding: 5px;
   cursor: pointer;
 }
+body .focus-zone .focus-zone-inner .focus-zone-inner-btn:hover, body .focus-zone .focus-zone-inner .focus-zone-inner-btn.active {
+  color: #ffffff;
+  background-color: #40a061;
+}
 body .focus-zone .focus-zone-inner .focus-zone-inner-btn-left {
-  border-radius: 14px 5px 5px 14px;
-  margin-left: 2px;
-  margin-right: 5px;
+  border-radius: 14px 0px 0px 14px;
+  margin-left: 5px;
 }
 body .focus-zone .focus-zone-inner .focus-zone-inner-btn-middle {
-  border-radius: 5px 5px 5px 5px;
-  margin-right: 5px;
+  border-radius: none;
+  margin-left: -2px;
 }
 body .focus-zone .focus-zone-inner .focus-zone-inner-btn-right {
-  border-radius: 5px 14px 14px 5px;
+  margin-left: -2px;
+  border-radius: 0px 14px 14px 0px;
 }
 body .focus-zone .focus-zone-inner .focus-zone-left {
   display: flex;
   flex-direction: row;
 }
+body .focus-zone .focus-zone-inner .focus-zone-left .focus-format,
 body .focus-zone .focus-zone-inner .focus-zone-left .focus-file,
 body .focus-zone .focus-zone-inner .focus-zone-left .focus-operations,
 body .focus-zone .focus-zone-inner .focus-zone-left .focus-graph {
   display: none;
 }
+body .focus-zone .focus-zone-inner .focus-zone-left .focus-format.active,
 body .focus-zone .focus-zone-inner .focus-zone-left .focus-file.active,
 body .focus-zone .focus-zone-inner .focus-zone-left .focus-operations.active,
 body .focus-zone .focus-zone-inner .focus-zone-left .focus-graph.active {
@@ -118,6 +129,40 @@ body .focus-zone .focus-zone-inner .focus-zone-left .file-upload-btn {
 body .focus-zone .focus-zone-inner .focus-zone-left .focus-operations,
 body .focus-zone .focus-zone-inner .focus-zone-left .focus-graph {
   margin-left: 3px;
+}
+body .focus-zone .focus-zone-inner .focus-zone-left .font-size-input {
+  width: 30px;
+  height: 24px;
+  margin-left: 5px;
+  padding-left: 5px;
+  border-radius: none;
+  margin-left: -2px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  border: 2px solid #000000;
+}
+body .focus-zone .focus-zone-inner .focus-zone-left .font-family-select {
+  width: 130px;
+  height: 30px;
+  margin-left: 5px;
+  padding-left: 5px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  border-radius: 14px 14px 14px 14px;
+  border: 2px solid #000000;
+}
+body .focus-zone .focus-zone-inner .focus-zone-left label {
+  display: flex;
+  align-self: center;
+  justify-content: center;
+}
+body .focus-zone .focus-zone-inner .focus-zone-left input[type=color] {
+  border: none;
+  display: inline;
+  background-color: transparent;
+  color: #777;
+  padding: 0;
+  width: 9px;
+  height: 24px;
+  border-radius: 50%;
 }
 body .focus-zone .focus-zone-inner .focus-zone-right {
   display: flex;
@@ -493,7 +538,8 @@ body .main-footer .add-new-col {
 /* Hover effect for menu options */
 .context-menu-option:hover {
   background-color: #f0f0f0;
-  cursor: pointer; /* This ensures the pointer icon on hover */
+  cursor: pointer;
+  /* This ensures the pointer icon on hover */
 }
 
 /* Option for disabled state if needed */

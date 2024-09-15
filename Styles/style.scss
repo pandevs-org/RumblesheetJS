@@ -10,6 +10,20 @@
     align-items: center;
 }
 
+@mixin button-style {
+    background-color: $btn-bg;
+    color: $btn-color;
+    padding: 10px 20px;
+    border: none;
+    border-radius: $border-radius;
+    cursor: pointer;
+    font-size: 16px;
+
+    &:hover {
+        background-color: $btn-bg-hover;
+    }
+}
+
 body,
 html {
     @include resetCss();
@@ -92,13 +106,22 @@ body {
             display: flex;
             justify-content: space-between;
             align-items: center;
+
+            .focus-zone-inner-seperator {
+                background-color: #e0e0e0;
+                margin-left: 5px;
+                height: 22px;
+                width: 2px;
+            }
+
             .focus-zone-input-btn {
                 height: max-content;
             }
+
             .focus-zone-inner-btn {
                 background-color: $white;
                 color: $black;
-                border-radius: 5px;
+                // border-radius: 5px;
                 height: 30px;
                 display: flex;
                 justify-content: center;
@@ -106,25 +129,39 @@ body {
                 box-shadow: $button-shadow;
                 padding: 5px;
                 cursor: pointer;
+
+                &:hover,
+                &.active {
+                    color: $white;
+                    background-color: #40a061;
+                }
             }
+
             .focus-zone-inner-btn-left {
-                border-radius: 14px 5px 5px 14px;
-                margin-left: 2px;
-                margin-right: 5px;
+                border-radius: 14px 0px 0px 14px;
+                margin-left: 5px;
+                // margin-right: 5px;
 
             }
+
             .focus-zone-inner-btn-middle {
-                border-radius: 5px 5px 5px 5px;
-                margin-right: 5px;
+                // border-radius: 5px 5px 5px 5px;
+                border-radius: none;
+                margin-left: -2px;
+                // margin-right: 5px;
             }
-            .focus-zone-inner-btn-right{
-                border-radius: 5px 14px 14px 5px;
+
+            .focus-zone-inner-btn-right {
+                margin-left: -2px;
+                border-radius: 0px 14px 14px 0px;
             }
+
             // Left Section (File & Buttons)
             .focus-zone-left {
                 display: flex;
                 flex-direction: row;
 
+                .focus-format,
                 .focus-file,
                 .focus-operations,
                 .focus-graph {
@@ -149,6 +186,42 @@ body {
                 .focus-graph {
                     margin-left: 3px;
 
+                }
+
+                .font-size-input {
+                    width: 30px;
+                    height: 24px;
+                    margin-left: 5px;
+                    padding-left: 5px;
+                    border-radius: none;
+                    margin-left: -2px;
+                    box-shadow: $button-shadow;
+                    border: 2px solid $black;
+                }
+
+                .font-family-select {
+                    width: 130px;
+                    height: 30px;
+                    margin-left: 5px;
+                    padding-left: 5px;
+                    box-shadow: $button-shadow;
+                    border-radius: 14px 14px 14px 14px;
+                    border: 2px solid $black;
+                }
+                label {
+                    display: flex;
+                    align-self: center;
+                    justify-content: center;
+                }
+                input[type="color"] {
+                    border: none;
+                    display: inline;
+                    background-color: transparent;
+                    color: #777;
+                    padding: 0;
+                    width: 9px;
+                    height: 24px;
+                    border-radius: 50%;
                 }
             }
 
@@ -575,7 +648,8 @@ body {
 /* Hover effect for menu options */
 .context-menu-option:hover {
     background-color: #f0f0f0;
-    cursor: pointer; /* This ensures the pointer icon on hover */
+    cursor: pointer;
+    /* This ensures the pointer icon on hover */
 }
 
 /* Option for disabled state if needed */
