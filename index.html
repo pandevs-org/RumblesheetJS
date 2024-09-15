@@ -19,7 +19,7 @@
 
   <div id="ribbon-container">
 
-    
+
 
     <!-- Progress Bar -->
     <div class="progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="75" aria-valuemin="0"
@@ -29,31 +29,10 @@
 
     <!-- Tab List -->
     <div class="tab-list-container">
-      <span class="tab-list-container-items file-tab-btn active">File</span>
+      <span class="tab-list-container-items format-tab-btn active">Format</span>
+      <span class="tab-list-container-items file-tab-btn ">File</span>
       <span class="tab-list-container-items operations-tab-btn">Operations</span>
       <span class="tab-list-container-items graph-tab-btn">Graph</span>
-      <label for="alignment">Text Alignment:</label>
-      <select id="alignment">
-        <option value="center">Center</option>
-        <option value="left">Left</option>
-        <option value="right">Right</option>
-        <option value="top">Top</option>
-        <option value="bottom">Bottom</option>
-      </select>
-      
-      <label for="fontSize">Font Size:</label>
-      <input type="number" id="fontSize" value="14" min="1">
-      
-      <label for="fontFamily">Font Family:</label>
-      <select id="fontFamily">
-        <option value="Arial">Arial</option>
-        <option value="Times New Roman">Times New Roman</option>
-        <option value="Verdana">Verdana</option>
-      </select>
-      
-      <label for="fontColor">Font Color:</label>
-      <input type="color" id="fontColor" value="#000000">
-      
     </div>
 
     <!-- Focus Zone -->
@@ -62,7 +41,120 @@
 
         <!-- Left Section (File Upload & Buttons) -->
         <div class="focus-zone-left">
-          <div class="focus-file active">
+
+          <div class="focus-format active">
+
+            <button class="focus-zone-inner-btn focus-zone-inner-btn-left active">
+              <span class="iconify" data-icon="f7:bold" data-width="23" data-height="23"></span>
+            </button>
+            <button class="focus-zone-inner-btn focus-zone-inner-btn-middle">
+              <span class="iconify" data-icon="lucide:italic" data-width="23" data-height="23"></span>
+            </button>
+            <button class="focus-zone-inner-btn focus-zone-inner-btn-middle">
+              <span class="iconify" data-icon="majesticons:strike-through-line" data-width="23" data-height="23"></span>
+            </button>
+            <button class="focus-zone-inner-btn focus-zone-inner-btn-right">
+              <span class="iconify" data-icon="lucide:underline" data-width="23" data-height="23"></span>
+            </button>
+
+            <div class="focus-zone-inner-seperator" aria-disabled="true" role="separator" style="user-select: none;">
+            </div>
+
+            <!-- horizontal align -->
+            <button class="focus-zone-inner-btn focus-zone-inner-btn-left active">
+              <span class="iconify" data-icon="mingcute:align-left-line" data-width="23" data-height="23"></span>
+            </button>
+            <button class="focus-zone-inner-btn focus-zone-inner-btn-middle">
+              <span class="iconify" data-icon="mingcute:align-center-line" data-width="23" data-height="23"></span>
+            </button>
+            <button class="focus-zone-inner-btn focus-zone-inner-btn-right">
+              <span class="iconify" data-icon="mingcute:align-right-line" data-width="23" data-height="23"></span>
+            </button>
+
+            <div class="focus-zone-inner-seperator" aria-disabled="true" role="separator" style="user-select: none;">
+            </div>
+
+            <!-- vertical align -->
+            <button class="focus-zone-inner-btn focus-zone-inner-btn-left">
+              <span class="iconify" data-icon="material-symbols:vertical-align-top-rounded" data-width="23"
+                data-height="23"></span>
+            </button>
+            <button class="focus-zone-inner-btn focus-zone-inner-btn-middle active">
+              <span class="iconify" data-icon="material-symbols:vertical-align-center-rounded" data-width="23"
+                data-height="23"></span>
+            </button>
+            <button class="focus-zone-inner-btn focus-zone-inner-btn-right">
+              <span class="iconify" data-icon="material-symbols:vertical-align-bottom-rounded" data-width="23"
+                data-height="23"></span>
+            </button>
+
+            <div class="focus-zone-inner-seperator" aria-disabled="true" role="separator" style="user-select: none;">
+            </div>
+
+            <!-- font size -->
+            <button class="focus-zone-inner-btn focus-zone-inner-btn-left">
+              <span class="iconify" data-icon="ph:minus-bold" data-width="23" data-height="23"></span>
+            </button>
+            <input class="font-size-input" type="text" id="fontSize">
+            <button class="focus-zone-inner-btn focus-zone-inner-btn-right">
+              <span class="iconify" data-icon="ph:plus-bold" data-width="23" data-height="23"></span>
+            </button>
+
+            <div class="focus-zone-inner-seperator" aria-disabled="true" role="separator" style="user-select: none;">
+            </div>
+
+            <select class="font-family-select" id="fontFamily">
+              <option class="font-family-option" value="Arial" style="font-family: 'Arial';">Arial</option>
+              <option class="font-family-option" value="Times New Roman" style="font-family: 'Times New Roman'">Times
+                New Roman</option>
+              <option class="font-family-option" value="Verdana" style="font-family: Verdana;">Verdana</option>
+            </select>
+
+            <div class="focus-zone-inner-seperator" aria-disabled="true" role="separator" style="user-select: none;">
+            </div>
+
+            <button class="focus-zone-inner-btn focus-zone-inner-btn-left">
+              <label for="text-color-picker">
+                <span class="iconify" data-icon="tabler:letter-a" data-width="23" data-height="23"></span>
+              </label>              
+              <input id="text-color-picker" id="fontColor" type="color" onchange="changeTextColor()" title="Text Color">
+            </button>
+
+            <button class="focus-zone-inner-btn focus-zone-inner-btn-right">
+              <label for="fill-color-picker">
+                <span class="iconify" data-icon="mdi:format-colour-fill" data-width="23" data-height="23"></span>
+              </label>
+              <input id="fill-color-picker" id="fillColor" type="color" onchange="changeFillColor()" title="Text Color">
+            </button>
+            
+
+
+          </div>
+          <!-- /////////////////////////////////////////////////  -->
+          <!-- <label for="alignment">Text Alignment:</label>
+            <select id="alignment">
+              <option value="center">Center</option>
+              <option value="left">Left</option>
+              <option value="right">Right</option>
+              <option value="top">Top</option>
+              <option value="bottom">Bottom</option>
+            </select> -->
+          <!-- 
+            <label for="fontSize">Font Size:</label>
+            <input type="number" id="fontSize" value="14" min="1"> -->
+
+          <!-- <label for="fontFamily">Font Family:</label>
+            <select id="fontFamily">
+              <option value="Arial">Arial</option>
+              <option value="Times New Roman">Times New Roman</option>
+              <option value="Verdana">Verdana</option>
+            </select>
+
+            <label for="fontColor">Font Color:</label>
+            <input type="color" id="fontColor" value="#000000">
+          </div> -->
+          <!-- /////////////////////////////////////////////////  -->
+          <div class="focus-file">
             <input class="focus-zone-input-btn focus-zone-inner-btn-left" type="file" name="file" accept=".csv" />
             <button class="focus-zone-inner-btn focus-zone-inner-btn-right" type="submit" value="Upload">
               <span class="iconify" data-icon="material-symbols:upload" data-width="23" data-height="23"></span>
@@ -92,12 +184,14 @@
         <div class="focus-zone-right">
           <button class="add-new-row focus-zone-inner-btn focus-zone-inner-btn-left">
             <span class="iconify" data-icon="majesticons:add-row" data-width="23" data-height="23"></span>
-            <!-- Excel Row -->
           </button>
-          <button class = "delete-excel"></button>
+
+          <button class="delete-excel focus-zone-inner-btn focus-zone-inner-btn-middle">
+            <span class="iconify" data-icon="mdi:table-large-remove" data-width="23" data-height="23"></span>
+          </button>
+
           <button class="add-new-col focus-zone-inner-btn focus-zone-inner-btn-right">
             <span class="iconify" data-icon="majesticons:add-column" data-width="23" data-height="23"></span>
-            <!-- Excel Column -->
           </button>
         </div>
 
@@ -145,6 +239,9 @@
 
 
   <script>
+    var formatTabBtn = document.querySelector(".format-tab-btn");
+    var formatTab = document.querySelector('.focus-format')
+
     var fileTabBtn = document.querySelector(".file-tab-btn");
     var focusFile = document.querySelector('.focus-file')
 
@@ -154,10 +251,25 @@
     var graphTabBtn = document.querySelector(".graph-tab-btn");
     var focusGraph = document.querySelector('.focus-graph')
 
+    formatTabBtn.addEventListener("click", function () {
+      formatTabBtn.classList.add("active")
+      fileTabBtn.classList.remove("active")
+      operationsTabBtn.classList.remove("active")
+      graphTabBtn.classList.remove("active")
+
+      formatTab.classList.add("active")
+      focusFile.classList.remove("active")
+      focusOperations.classList.remove("active")
+      focusGraph.classList.remove("active")
+    });
+
     fileTabBtn.addEventListener("click", function () {
+      formatTabBtn.classList.remove("active")
       fileTabBtn.classList.add("active")
       operationsTabBtn.classList.remove("active")
       graphTabBtn.classList.remove("active")
+
+      formatTab.classList.remove("active")
       focusFile.classList.add("active")
       focusOperations.classList.remove("active")
       focusGraph.classList.remove("active")
@@ -165,9 +277,12 @@
 
 
     operationsTabBtn.addEventListener("click", function () {
+      formatTabBtn.classList.remove("active")
       fileTabBtn.classList.remove("active")
       operationsTabBtn.classList.add("active")
       graphTabBtn.classList.remove("active")
+
+      formatTab.classList.remove("active")
       focusFile.classList.remove("active")
       focusOperations.classList.add("active")
       focusGraph.classList.remove("active")
@@ -175,13 +290,33 @@
 
 
     graphTabBtn.addEventListener("click", function () {
+      formatTabBtn.classList.remove("active")
       fileTabBtn.classList.remove("active")
       operationsTabBtn.classList.remove("active")
       graphTabBtn.classList.add("active")
+
+      formatTab.classList.remove("active")
       focusFile.classList.remove("active")
       focusOperations.classList.remove("active")
       focusGraph.classList.add("active")
     });
+
+    const fontSelect = document.getElementById('fontFamily');
+
+    fontSelect.addEventListener('change', function () {
+      const selectedFont = fontSelect.value;
+      fontSelect.style.fontFamily = selectedFont;
+    });
+
+    function changeTextColor() {
+      const color = document.querySelector(".text-color-picker").value;
+      document.execCommand("foreColor", false, color);
+    }
+
+    function changeFillColor() {
+      const color = document.querySelector('.fill-color-picker').value;
+      document.execCommand("foreColor", false, color);
+    }
   </script>
 
   <script type="module" src="Scripts/initiater.js"></script>
