@@ -113,36 +113,16 @@ export class HeaderCellFunctionality {
     handleContextMenuAction(action, canvasType ,clickedcell) {
         if (action === 'add-row') {
             // Logic to add a new row
-            console.log(this.cellFunctionality.sheetRenderer.sparseMatrix)
-            this.cellFunctionality.sheetRenderer.sparseMatrix.printMatrixByColumn();
-            console.log("----------------------------------------------------------------")
-            this.cellFunctionality.sheetRenderer.sparseMatrix.printMatrixByRow()
-            console.log("----------------------------------------------------------------")
-
             this.cellFunctionality.sheetRenderer.sparseMatrix.addRowInBetween(clickedcell.row)
-            console.log(`Adding new row on ${canvasType} ${clickedcell.row} canvas`);
-            this.cellFunctionality.sheetRenderer.sparseMatrix.printMatrixByRow()
-            console.log("----------------------------------------------------------------")
-            this.cellFunctionality.sheetRenderer.sparseMatrix.printMatrixByColumn();
-
-
-            // Your logic for adding a row goes here
         } else if (action === 'delete-row') {
             // Logic to delete a row
-            console.log(`Deleting row on ${canvasType} canvas`);
-            // Your logic for deleting a row goes here
+            this.cellFunctionality.sheetRenderer.sparseMatrix.deleteRow(clickedcell.row)
         } else if (action === 'add-column') {
             // Logic to add a new column
-            console.log(clickedcell.col)
-            this.cellFunctionality.sheetRenderer.sparseMatrix.printMatrixByColumn()
             this.cellFunctionality.sheetRenderer.sparseMatrix.addColumnInBetween(clickedcell.col)
-            console.log(`Adding new column on ${canvasType} ${clickedcell.col} canvas`);
-            this.cellFunctionality.sheetRenderer.sparseMatrix.printMatrixByColumn()
-            // Your logic for adding a column goes here
         } else if (action === 'delete-column') {
             // Logic to delete a column
-            console.log(`Deleting column on ${canvasType} canvas`);
-            // Your logic for deleting a column goes here
+            this.cellFunctionality.sheetRenderer.sparseMatrix.deleteColumn(clickedcell.col)
         }
     }
     

@@ -74,7 +74,11 @@ export class CellUtility {
               verticalCells[j].value,
               this.letterToNumber(horizontalCells[i].value)
             )
-          }
+          },
+          node: this.spreadsheetManager.getCell(
+            verticalCells[j].value,
+            this.letterToNumber(horizontalCells[i].value)
+          )
         };
         cells.push(cell);
       }

@@ -34,7 +34,8 @@ class Excel {
         this.row = row;
         this.Grid_maker = Grid_maker
         this.init();
-    }
+
+    } 
 
     init() {
         this.constructExcel();
@@ -106,11 +107,84 @@ class Grid_maker {
         document.querySelector('form').addEventListener('submit', (e) => this.handleFileUpload(e));
         // Add event listeners to buttons
         document.querySelector('.add-new-row').addEventListener('click', () => this.addNewRow());
-        document.querySelector('.add-new-col').addEventListener('click', () => this.addNewCol(this.currExcelRow)); // Adjust as necessary
-
+        document.querySelector('.add-new-col').addEventListener('click', () => this.addNewCol(this.currExcelRow));
+        document.querySelector('.delete-excel').addEventListener('click', () => this.deleteExcel(this.currExcelRow, this.currExcelCol));
         // Handle file upload
         document.querySelector('form').addEventListener('submit', (e) => this.handleFileUpload(e));
     }
+
+    deleteExcel(rowNum, colNum) {
+        // if (rowNum > this.currentRowCount || rowNum <= 0 || colNum <= 0 || colNum > this.rowArr[rowNum - 1].length) {
+        //     alert("Invalid row or column number");
+        //     return;
+        // }
+    
+        // Remove the column cell from the specified row
+        const rowElement = document.getElementById(`row_${rowNum}`);
+        if (rowElement) {
+            const cells = rowElement.querySelectorAll('.excel');
+            if (cells[colNum - 1]) {
+                rowElement.removeChild(cells[colNum - 1]);
+            }
+        }
+    
+        // Remove the column data from the array
+        this.rowArr[rowNum - 1].splice(colNum - 1, 1);
+    
+        // Check if the row is empty and should be removed
+        if (this.rowArr[rowNum - 1].length === 0) {
+            this.deleteRow(rowNum);
+            return; // Exit the function early as the row has been deleted
+        }
+    
+        // Update column elements in the grid
+        this.rowArr.forEach((row, rowIndex) => {
+            row.forEach((cell, colIndex) => {
+                const updatedColNum = colIndex + 1;
+                if (updatedColNum >= colNum) {
+                    cell.element.style.gridColumn = updatedColNum;
+                    cell.element.dataset.col = updatedColNum;
+                }
+            });
+        });
+    
+        // Re-add resize handles if needed
+        this.addResizeHandles();
+    }
+    
+    deleteRow(rowNum) {
+        if (rowNum > this.currentRowCount || rowNum <= 0) {
+            alert("Invalid row number");
+            return;
+        }
+    
+        // Remove the row from the DOM
+        const rowElement = document.getElementById(`row_${rowNum}`);
+        if (rowElement) {
+            this.mainContainer.removeChild(rowElement);
+        }
+    
+        // Remove the row data from the array
+        this.rowArr.splice(rowNum - 1, 1);
+    
+        // Update the row IDs and cells in the grid
+        for (let i = rowNum; i <= this.currentRowCount; i++) {
+            const rowElement = document.getElementById(`row_${i}`);
+            if (rowElement) {
+                rowElement.id = `row_${i - 1}`;
+                const cells = rowElement.querySelectorAll('.excel');
+                cells.forEach((cell, colIndex) => {
+                    cell.dataset.row = i - 1;
+                });
+            }
+        }
+    
+        this.currentRowCount--;
+    
+        // Re-add resize handles if needed
+        this.addResizeHandles();
+    }
+    
 
     async handleFileUpload(e) {
         e.preventDefault();
@@ -259,10 +333,6 @@ class Grid_maker {
 
         this.mainContainer.addEventListener('mousedown', startResize);
     }
-
-    
-    
-   
 }
 
 function init(mainContainer) {

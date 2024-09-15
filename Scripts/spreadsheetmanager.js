@@ -64,6 +64,9 @@ export class SpreadsheetManager {
     }
 
     getValue(row, column) {
+        return this.sparseMatrix.getCellvalue(row, column);
+    }
+    getCell(row, column) {
         return this.sparseMatrix.getCell(row, column);
     }
 

@@ -5,8 +5,6 @@ import { CellFunctionality } from "./cellfunctionality.js";
 import { Graph } from "./graph.js";
 import { HeaderCellFunctionality } from "./headercellfunctionality.js";
 
-
-
 export class SheetRenderer {
   constructor(sheet) {
     this.sheet = sheet;
@@ -246,6 +244,11 @@ adjustRowPosition(targetRow,targetColumnIndex) {
       this.handleWheel.bind(this),
       { passive: false }
     );
+
+    document.getElementById('alignment').addEventListener('change', this.updateTextStyles.bind(this));
+    document.getElementById('fontSize').addEventListener('input', this.updateTextStyles.bind(this));
+    document.getElementById('fontFamily').addEventListener('change', this.updateTextStyles.bind(this));
+    document.getElementById('fontColor').addEventListener('input', this.updateTextStyles.bind(this));
   }
 
   handleResize() {
@@ -621,7 +624,7 @@ adjustRowPosition(targetRow,targetColumnIndex) {
              
   
               // Draw centered text in the cell
-              this.drawCenteredText(ctx, current.value.toString(),
+              this.drawCenteredTextforsparse(ctx,current, current.value.toString(),
                 cellX + hCell.width / 2, cellY + vCell.height / 2,
                 hCell.width, vCell.height
               );
@@ -639,6 +642,49 @@ adjustRowPosition(targetRow,targetColumnIndex) {
     }
   }
   
+
+  updateTextStyles() {
+    const alignment = document.getElementById('alignment').value;
+    const fontSize = document.getElementById('fontSize').value;
+    const fontFamily = document.getElementById('fontFamily').value;
+    const fontColor = document.getElementById('fontColor').value;
+  
+    // Assuming `sheetRenderer` is your instance of SheetRenderer and `selectedCells` is an array of selected cells
+    if (this.cellFunctionality.selectedCells) {
+      this.cellFunctionality.selectedCells.forEach(cell => {
+        // Apply styles to each selected cell
+        console.log(cell.node)
+        cell.node.textAlign = alignment;
+        cell.node.fontSize = `${fontSize}`;
+        cell.node.fontFamily = fontFamily;
+        cell.node.color = fontColor;
+      });
+    }
+  }
+
+  drawCenteredTextforsparse(ctx, cell, text, x, y, maxWidth, maxHeight) {
+    const fontSize = cell.fontSize || 14; // Default to 14 if not specified
+    const fontFamily = cell.fontFamily || 'Arial'; // Default to Arial if not specified
+    const fontColor = cell.color || '#000000'; // Default to black if not specified
+
+    // Set text styles
+    
+    ctx.font = `${fontSize}px ${fontFamily}`;
+    ctx.fillStyle = fontColor;
+    ctx.textAlign = cell.textAlign || 'center'; // Center alignment
+    ctx.textBaseline = 'middle'; // Middle alignment
+
+    // Calculate text size and adjust fontSize if needed
+    let textWidth = ctx.measureText(text).width;
+    if (textWidth > maxWidth * 0.9) {
+        let adjustedFontSize = fontSize * (maxWidth * 0.9) / textWidth;
+        ctx.font = `${Math.max(adjustedFontSize, 14)}px ${fontFamily}`; // Ensure minimum font size
+    }
+
+    // Draw text
+    ctx.fillText(text, x, y, maxWidth);
+}
+
 
   drawCenteredText(ctx, text, x, y, maxWidth, maxHeight) {
     const baseFontSize = this.baseGridSize * this.scale;
@@ -676,30 +722,6 @@ adjustRowPosition(targetRow,targetColumnIndex) {
 clearDragHighlight() {
     this.draw(); // Re-render the entire sheet to clear highlights
 }
-
-// updateDragPosition(dragIndex, targetIndex, type, position) {
-//     this.draw(); // Re-render the sheet
-
-//     const canvas = type === 'column' ? this.canvases.horizontal : this.canvases.vertical;
-//     const ctx = canvas.getContext('2d');
-
-//     // Draw a line where the column/row will be inserted
-//     ctx.beginPath();
-//     ctx.strokeStyle = 'blue';
-//     ctx.lineWidth = 2;
-    
-//     if (type === 'column') {
-//         const x = this.headerCellManager.horizontalHeaderCells[targetIndex].x;
-//         ctx.moveTo(x, 0);
-//         ctx.lineTo(x, canvas.height);
-//     } else {
-//         const y = this.headerCellManager.verticalHeaderCells[targetIndex].y;
-//         ctx.moveTo(0, y);
-//         ctx.lineTo(canvas.width, y);
-//     }
-//     ctx.stroke();
-// }
-
 
 updateDragPosition(dragIndex, targetIndex, type, position) {
 

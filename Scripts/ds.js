@@ -7,6 +7,10 @@ class Node {
         this.nextCol = nextCol;
         this.prevRow = prevRow;
         this.prevCol = prevCol;
+        this.textAlign = "center";
+        this.fontSize = 14 ;
+        this.fontFamily = 'Arial';
+        this.color = "black";
     }
 }
 
@@ -141,6 +145,86 @@ export class SparseMatrix {
         }
     }
     
+    deleteRow(rowToDelete) {
+        // Remove nodes from all columns in the row to delete
+        let current = this.rowHeaders[rowToDelete];
+        while (current) {
+            this._removeNodeFromColumn(current.colValue, rowToDelete);
+            current = current.nextCol;
+        }
+    
+        // Remove the row header
+        delete this.rowHeaders[rowToDelete];
+    
+        // Update rows in the row headers to shift down if necessary
+        Object.keys(this.rowHeaders).map(Number).sort((a, b) => a - b).forEach(row => {
+            if (row > rowToDelete) this._shiftRow(row, row - 1);
+        });
+    }
+
+    deleteColumn(colToDelete) {
+        // Remove nodes from all rows in the column to delete
+        let current = this.colHeaders[colToDelete];
+        while (current) {
+            this._removeNodeFromRow(current.rowValue, colToDelete);
+            current = current.nextRow;
+        }
+    
+        // Remove the column header
+        delete this.colHeaders[colToDelete];
+    
+        // Update columns in the column headers to shift left if necessary
+        Object.keys(this.colHeaders).map(Number).sort((a, b) => a - b).forEach(col => {
+            if (col > colToDelete) this._shiftColumn(col, col - 1);
+        });
+    }
+
+    _removeNodeFromRow(row, col) {
+        let current = this.rowHeaders[row];
+        let prev = null;
+    
+        // Traverse to find the node to remove
+        while (current && current.colValue !== col) {
+            prev = current;
+            current = current.nextCol;
+        }
+    
+        if (current) {
+            if (prev) {
+                prev.nextCol = current.nextCol;
+            } else {
+                this.rowHeaders[row] = current.nextCol;
+            }
+    
+            if (current.nextCol) {
+                current.nextCol.prevCol = prev;
+            }
+        }
+    }
+    
+    _removeNodeFromColumn(col, row) {
+        let current = this.colHeaders[col];
+        let prev = null;
+    
+        // Traverse to find the node to remove
+        while (current && current.rowValue !== row) {
+            prev = current;
+            current = current.nextRow;
+        }
+    
+        if (current) {
+            if (prev) {
+                prev.nextRow = current.nextRow;
+            } else {
+                this.colHeaders[col] = current.nextRow;
+            }
+    
+            if (current.nextRow) {
+                current.nextRow.prevRow = prev;
+            }
+        }
+    }
+    
     createCell(row, col, value) {
         if (this._cellExists(row, col)) return;
 
@@ -168,10 +252,19 @@ export class SparseMatrix {
         this.createCell(row, col, value);
     }
 
-    getCell(row, col) {
+    getCellvalue(row, col) {
         let current = this.rowHeaders[row];
         while (current) {
             if (current.colValue === col) return current.value;
+            current = current.nextCol;
+        }
+        return null;
+    }
+
+    getCell(row, col) {
+        let current = this.rowHeaders[row];
+        while (current) {
+            if (current.colValue === col) return current;
             current = current.nextCol;
         }
         return null;

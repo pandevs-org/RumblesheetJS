@@ -19,6 +19,8 @@
 
   <div id="ribbon-container">
 
+    
+
     <!-- Progress Bar -->
     <div class="progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="75" aria-valuemin="0"
       aria-valuemax="100">
@@ -30,6 +32,28 @@
       <span class="tab-list-container-items file-tab-btn active">File</span>
       <span class="tab-list-container-items operations-tab-btn">Operations</span>
       <span class="tab-list-container-items graph-tab-btn">Graph</span>
+      <label for="alignment">Text Alignment:</label>
+      <select id="alignment">
+        <option value="center">Center</option>
+        <option value="left">Left</option>
+        <option value="right">Right</option>
+        <option value="top">Top</option>
+        <option value="bottom">Bottom</option>
+      </select>
+      
+      <label for="fontSize">Font Size:</label>
+      <input type="number" id="fontSize" value="14" min="1">
+      
+      <label for="fontFamily">Font Family:</label>
+      <select id="fontFamily">
+        <option value="Arial">Arial</option>
+        <option value="Times New Roman">Times New Roman</option>
+        <option value="Verdana">Verdana</option>
+      </select>
+      
+      <label for="fontColor">Font Color:</label>
+      <input type="color" id="fontColor" value="#000000">
+      
     </div>
 
     <!-- Focus Zone -->
@@ -70,6 +94,7 @@
             <span class="iconify" data-icon="majesticons:add-row" data-width="23" data-height="23"></span>
             <!-- Excel Row -->
           </button>
+          <button class = "delete-excel"></button>
           <button class="add-new-col focus-zone-inner-btn focus-zone-inner-btn-right">
             <span class="iconify" data-icon="majesticons:add-column" data-width="23" data-height="23"></span>
             <!-- Excel Column -->
@@ -98,9 +123,6 @@
       <button id="search">Search</button>
     </div>
 
-
-    <button class="add-new-row">Row +</button>
-    <button class="add-new-col">Col +</button>
 
     <button id="sumBtn">Show Sum</button>
     <button id="avgBtn">Show Average</button>
