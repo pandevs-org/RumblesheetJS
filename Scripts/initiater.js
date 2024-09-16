@@ -1,54 +1,39 @@
-import {Emaker} from './eMaker.js'
-import {RibbonMaker} from './ribbonMaker.js'
+import { Emaker } from './Emaker/eMaker.js';
 
-
-class ExcelBorderHighlighter {
-    constructor(excelContainer) {
-        this.excelContainer = excelContainer;
-        this.selectedDiv = null;
-        this.handleClick = this.handleClick.bind(this);
-        this.addClickListener();
-    }
-  
-    handleClick(event) {
-        if (this.selectedDiv) {
-            this.selectedDiv.style.border = '1px solid black';
-        }
-  
-        const targetDiv = event.target.closest('div[aria-rowindex][aria-colindex]');
-        
-        if (targetDiv) {
-            targetDiv.style.border = '1px solid red';
-            this.selectedDiv = targetDiv;
-        }
-    }
-  
-    addClickListener() {
-        this.excelContainer.addEventListener('click', this.handleClick);
-    }
-}
-
+/**
+ * Represents an Excel-like grid component.
+ */
 class Excel {
-    constructor(rowContainer, row, col,Grid_maker) {
+    /**
+     * Constructs an Excel instance.
+     * @param {HTMLElement} rowContainer - The container element for the row.
+     * @param {number} row - The current row number.
+     * @param {number} col - The current column number.
+     * @param {Grid_maker} Grid_maker - The Grid_maker instance for managing the grid.
+     */
+    constructor(rowContainer, row, col, Grid_maker) {
         this.rowContainer = rowContainer;
         this.col = col;
         this.row = row;
-        this.Grid_maker = Grid_maker
+        this.Grid_maker = Grid_maker;
         this.init();
-
-    } 
-
-    init() {
-        this.constructExcel();
-        //document.querySelector('form').addEventListener('submit', (e) => this.handleFileUpload(e));
     }
 
+    /**
+     * Initializes the Excel component by constructing it.
+     */
+    init() {
+        this.constructExcel();
+    }
+
+    /**
+     * Handles file upload and sends it to the server for processing.
+     * @param {Event} e - The event triggered on form submission.
+     */
     async handleFileUpload(e) {
         e.preventDefault();
 
         const formData = new FormData(e.target);
-        console.log(formData);
-        
         const response = await fetch('http://localhost:5228/api/Data/uploadAndCreateTable', {
             method: 'POST',
             body: formData
@@ -56,72 +41,105 @@ class Excel {
 
         if (response.ok) {
             const data = await response.json();
-           
             this.currSheetObj.instance.UploadAndFetch.showTableCreationPopup(data.columns, data.tempFilePath);
         } else {
             alert('Error uploading file');
         }
     }
- 
+
+    /**
+     * Constructs the individual Excel cell.
+     */
     constructExcel() {
         const excel = document.createElement('div');
         excel.className = 'excel resizable';
-        excel.setAttribute('id', `rowCol${this.row}_${this.col}`);
-        excel.setAttribute('role', 'gridcell');
-        excel.setAttribute('aria-rowindex', this.row);
-        excel.setAttribute('aria-colindex', this.col);
+        excel.id = `rowCol${this.row}_${this.col}`;
+        excel.role = 'gridcell';
+        excel.ariaRowIndex = this.row;
+        excel.ariaColIndex = this.col;
         excel.style.flex = '1';
         this.rowContainer.appendChild(excel);
         this.element = excel;
-        new RibbonMaker();
-        new Emaker(excel, this.row, this.col,this.Grid_maker);
-        
+        new Emaker(excel, this.row, this.col, this.Grid_maker);
     }
 
-    updateCurrExcel(excelRow,excelCol,sheetObj){
-
+    /**
+     * Updates the current Excel instance with the new row, column, and sheet object.
+     * @param {number} excelRow - The current row index.
+     * @param {number} excelCol - The current column index.
+     * @param {Object} sheetObj - The current sheet object.
+     */
+    updateCurrExcel(excelRow, excelCol, sheetObj) {
         this.currExcelRow = excelRow;
         this.currExcelCol = excelCol;
         this.currSheetObj = sheetObj;
-        console.log("updated row col as ",excelRow,excelCol,sheetObj);
-        console.log(this.currSheetObj.instance);
     }
 }
-
-class Grid_maker {
+/**
+ * Class representing a grid maker.
+ */
+class GridMaker {
+    /**
+     * Create a grid maker.
+     * @param {HTMLElement} mainContainer - The main container to hold the grid.
+     * @param {number} maxRow - Maximum number of rows.
+     * @param {number} maxCol - Maximum number of columns.
+     */
     constructor(mainContainer, maxRow, maxCol) {
         this.mainContainer = mainContainer;
         this.maxRow = maxRow;
         this.maxCol = maxCol;
+        this.selectedDiv = null;
         this.currentRowCount = 0;
         this.rowArr = [];
         this.init();
     }
 
-    
-
+    /**
+     * Initialize the grid maker and set up event listeners.
+     */
     init() {
         this.mainContainer.style.display = 'flex';
         this.mainContainer.style.flexDirection = 'column';
-        this.addNewRow();       
-       
-        this.borderHighlighter = new ExcelBorderHighlighter(this.mainContainer);
+        this.addNewRow();
+        this.handleClick = this.handleClick.bind(this);
+        this.setupEventListeners();
+    }
+
+    /**
+     * Set up the event listeners for various interactions in the grid.
+     */
+    setupEventListeners() {
         document.querySelector('form').addEventListener('submit', (e) => this.handleFileUpload(e));
-        // Add event listeners to buttons
         document.querySelector('.add-new-row').addEventListener('click', () => this.addNewRow());
         document.querySelector('.add-new-col').addEventListener('click', () => this.addNewCol(this.currExcelRow));
         document.querySelector('.delete-excel').addEventListener('click', () => this.deleteExcel(this.currExcelRow, this.currExcelCol));
-        // Handle file upload
-        document.querySelector('form').addEventListener('submit', (e) => this.handleFileUpload(e));
+        this.mainContainer.addEventListener('click', this.handleClick);
     }
 
+    /**
+     * Handle click events to update the selected cell.
+     * @param {MouseEvent} event - The click event.
+     */
+    handleClick(event) {
+        if (this.selectedDiv) {
+            this.selectedDiv.style.border = '1px solid black';
+        }
+
+        const targetDiv = event.target.closest('div[aria-rowindex][aria-colindex]');
+        
+        if (targetDiv) {
+            targetDiv.style.border = '1px solid red';
+            this.selectedDiv = targetDiv;
+        }
+    }
+
+    /**
+     * Delete a specific Excel cell by row and column number.
+     * @param {number} rowNum - The row number to delete from.
+     * @param {number} colNum - The column number to delete.
+     */
     deleteExcel(rowNum, colNum) {
-        // if (rowNum > this.currentRowCount || rowNum <= 0 || colNum <= 0 || colNum > this.rowArr[rowNum - 1].length) {
-        //     alert("Invalid row or column number");
-        //     return;
-        // }
-    
-        // Remove the column cell from the specified row
         const rowElement = document.getElementById(`row_${rowNum}`);
         if (rowElement) {
             const cells = rowElement.querySelectorAll('.excel');
@@ -129,17 +147,14 @@ class Grid_maker {
                 rowElement.removeChild(cells[colNum - 1]);
             }
         }
-    
-        // Remove the column data from the array
+
         this.rowArr[rowNum - 1].splice(colNum - 1, 1);
-    
-        // Check if the row is empty and should be removed
+
         if (this.rowArr[rowNum - 1].length === 0) {
             this.deleteRow(rowNum);
-            return; // Exit the function early as the row has been deleted
+            return;
         }
-    
-        // Update column elements in the grid
+
         this.rowArr.forEach((row, rowIndex) => {
             row.forEach((cell, colIndex) => {
                 const updatedColNum = colIndex + 1;
@@ -149,51 +164,45 @@ class Grid_maker {
                 }
             });
         });
-    
-        // Re-add resize handles if needed
+
         this.addResizeHandles();
     }
-    
+
+    /**
+     * Delete a specific row.
+     * @param {number} rowNum - The row number to delete.
+     */
     deleteRow(rowNum) {
-        if (rowNum > this.currentRowCount || rowNum <= 0) {
-            alert("Invalid row number");
-            return;
-        }
-    
-        // Remove the row from the DOM
         const rowElement = document.getElementById(`row_${rowNum}`);
         if (rowElement) {
             this.mainContainer.removeChild(rowElement);
         }
-    
-        // Remove the row data from the array
+
         this.rowArr.splice(rowNum - 1, 1);
-    
-        // Update the row IDs and cells in the grid
+
         for (let i = rowNum; i <= this.currentRowCount; i++) {
             const rowElement = document.getElementById(`row_${i}`);
             if (rowElement) {
                 rowElement.id = `row_${i - 1}`;
                 const cells = rowElement.querySelectorAll('.excel');
-                cells.forEach((cell, colIndex) => {
+                cells.forEach((cell) => {
                     cell.dataset.row = i - 1;
                 });
             }
         }
-    
+
         this.currentRowCount--;
-    
-        // Re-add resize handles if needed
         this.addResizeHandles();
     }
-    
 
+    /**
+     * Handle the file upload event and send data to the server.
+     * @param {Event} e - The form submit event.
+     */
     async handleFileUpload(e) {
         e.preventDefault();
-
         const formData = new FormData(e.target);
-        console.log(formData);
-        
+
         const response = await fetch('http://localhost:5228/api/Data/uploadAndCreateTable', {
             method: 'POST',
             body: formData
@@ -201,24 +210,27 @@ class Grid_maker {
 
         if (response.ok) {
             const data = await response.json();
-           
             this.currSheetObj.instance.UploadAndFetch.showTableCreationPopup(data.columns, data.tempFilePath);
         } else {
             alert('Error uploading file');
         }
     }
 
-    updateCurrExcel(excelRow,excelCol,sheetObj){
-
+    /**
+     * Update the current active Excel cell.
+     * @param {number} excelRow - The Excel row number.
+     * @param {number} excelCol - The Excel column number.
+     * @param {Object} sheetObj - The sheet object reference.
+     */
+    updateCurrExcel(excelRow, excelCol, sheetObj) {
         this.currExcelRow = excelRow;
         this.currExcelCol = excelCol;
         this.currSheetObj = sheetObj;
     }
 
-    
-
-    
-
+    /**
+     * Add a new row to the grid.
+     */
     addNewRow() {
         if (this.currentRowCount >= this.maxRow) {
             alert("No more rows can be added");
@@ -231,13 +243,17 @@ class Grid_maker {
         row.id = `row_${this.currentRowCount}`;
         row.style.flex = '1';
 
-        const excel = new Excel(row, this.currentRowCount, 1,this);
+        const excel = new Excel(row, this.currentRowCount, 1, this);
         this.rowArr[this.currentRowCount - 1] = [excel];
         this.mainContainer.appendChild(row);
         this.addResizeHandles();
         this.handleResize();
     }
 
+    /**
+     * Add a new column to the specified row.
+     * @param {number} rowNum - The row number to add a column to.
+     */
     addNewCol(rowNum) {
         if (rowNum > this.currentRowCount) return;
         let colCount = this.rowArr[rowNum - 1].length;
@@ -248,17 +264,19 @@ class Grid_maker {
 
         colCount += 1;
         const row = document.getElementById(`row_${rowNum}`);
-        const excel = new Excel(row, rowNum, colCount,this);
+        const excel = new Excel(row, rowNum, colCount, this);
         this.rowArr[rowNum - 1].push(excel);
         this.addResizeHandles();
         this.handleResize();
     }
 
+    /**
+     * Add resize handles to rows and columns.
+     */
     addResizeHandles() {
         this.rowArr.forEach((row, rowIndex) => {
             const rowElement = document.getElementById(`row_${rowIndex + 1}`);
 
-            // Add row resize handle
             if (rowIndex < this.rowArr.length - 1) {
                 const rowResizeHandle = document.createElement('div');
                 rowResizeHandle.className = 'row-resize-handle';
@@ -266,7 +284,6 @@ class Grid_maker {
             }
 
             row.forEach((cell, colIndex) => {
-                // Add column resize handle
                 if (colIndex < row.length - 1) {
                     const colResizeHandle = document.createElement('div');
                     colResizeHandle.className = 'col-resize-handle';
@@ -276,6 +293,9 @@ class Grid_maker {
         });
     }
 
+    /**
+     * Handle the resize action for rows and columns.
+     */
     handleResize() {
         let isResizing = false;
         let currentElement = null;
@@ -286,7 +306,6 @@ class Grid_maker {
             if (e.target.classList.contains('col-resize-handle')) {
                 currentElement = e.target.closest('.excel');
                 resizeType = 'column';
-                
             } else if (e.target.classList.contains('row-resize-handle')) {
                 currentElement = e.target.closest('.row');
                 resizeType = 'row';
@@ -311,18 +330,16 @@ class Grid_maker {
             if (resizeType === 'column') {
                 const width = startWidth + (e.clientX - startX);
                 currentElement.style.width = `${width}px`;
-                currentElement.style.flex = 'none'; // Override flex settings
+                currentElement.style.flex = 'none';
             } else if (resizeType === 'row') {
                 const height = startHeight + (e.clientY - startY);
-                // Ensure the height does not go below a minimum value (e.g., 50px)
                 const newHeight = Math.max(height, 50);
                 currentElement.style.height = `${newHeight}px`;
-                currentElement.style.flex = 'none'; // Override flex settings
+                currentElement.style.flex = 'none';
             }
 
-            // Force a reflow/repaint to make sure the changes are applied
             currentElement.style.display = 'none';
-            currentElement.offsetHeight; // Trigger reflow
+            currentElement.offsetHeight;
             currentElement.style.display = '';
         };
 
@@ -337,11 +354,15 @@ class Grid_maker {
     }
 }
 
+/**
+ * Initialize the grid maker.
+ * @param {HTMLElement} mainContainer - The main container for the grid.
+ */
 function init(mainContainer) {
-    new Grid_maker(mainContainer, 3, 3);
+    new GridMaker(mainContainer, 3, 3);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    let mainContainer = document.getElementById("mainContainer");
+    const mainContainer = document.getElementById("mainContainer");
     init(mainContainer);
 });
