@@ -635,7 +635,7 @@ adjustRowPosition(targetRow,targetColumnIndex) {
              
   
               // Draw centered text in the cell
-              this.drawCenteredTextforsparse(ctx,current, current.value.toString(),
+              this.drawCenteredTextforsparse(ctx,current, this.sparseMatrix.FormulaParser.evaluateFormula(current.value),
                 cellX + hCell.width / 2, cellY + vCell.height / 2,
                 hCell.width, vCell.height
               );

@@ -1,3 +1,4 @@
+import { FormulaParser } from "./formulaParser.js";
 class Node {
     constructor(rowValue, colValue, value, nextRow = null, nextCol = null, prevRow = null, prevCol = null) {
         this.rowValue = rowValue;
@@ -19,6 +20,7 @@ export class SparseMatrix {
     constructor() {
         this.rowHeaders = {}; // Stores the head of each row's linked list
         this.colHeaders = {}; // Stores the head of each column's linked list
+        this.FormulaParser = new FormulaParser(this);
     }
 
     _cellExists(row, col) {
@@ -256,7 +258,7 @@ export class SparseMatrix {
     getCellvalue(row, col) {
         let current = this.rowHeaders[row];
         while (current) {
-            if (current.colValue === col) return current.value;
+            if (current.colValue === col) return this.FormulaParser.evaluateFormula( current.value);
             current = current.nextCol;
         }
         return null;
