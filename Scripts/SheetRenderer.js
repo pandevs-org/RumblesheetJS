@@ -621,9 +621,6 @@ adjustRowPosition(targetRow,targetColumnIndex) {
             // Save context and set text styles
             ctx.save();
             ctx.fillStyle = "#000000";
-            ctx.font = "14px Arial";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
   
             // Clip the rendering area to the cell's rectangle
             ctx.beginPath();

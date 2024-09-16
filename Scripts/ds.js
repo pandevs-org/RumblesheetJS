@@ -1,4 +1,4 @@
-import { FormulaParser } from "./formulaParser.js";
+import { FormulaParser } from "./formulaparser.js";
 class Node {
     constructor(rowValue, colValue, value, nextRow = null, nextCol = null, prevRow = null, prevCol = null) {
         this.rowValue = rowValue;
