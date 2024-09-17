@@ -1,26 +1,37 @@
 import { SpreadsheetManager } from "./spreadsheetmanager.js";
 import { CopyPasteManager } from './copyPasteManager/copypastemanger.js';
-import { CellUtility } from "./cellutility.js"; // Import the CellUtility class
+import { CellUtility } from "./cellUtility.js"; // Import the CellUtility class
 import { CalculationManager } from "./calculationManager.js";
 
+/**
+ * Class responsible for managing cell interactions and functionality in the spreadsheet.
+ */
 export class CellFunctionality {
+  /**
+   * @param {Object} sheetRenderer - The renderer responsible for rendering the spreadsheet.
+   */
   constructor(sheetRenderer) {
     this.sheetRenderer = sheetRenderer;
     this.selectedCells = []; // Array to store selected cells
     this.isDragging = false; // Track if the user is dragging
-    this.isScrolling = false;
-    this.startPoint = null;
-    this.spreadsheetManager = new SpreadsheetManager(this);
-    this.cellUtility = new CellUtility(sheetRenderer, this.spreadsheetManager); // Instantiate CellUtility
-    this.copyPasteManager = new CopyPasteManager(this, this.spreadsheetManager);
-    this.calculationManager = new CalculationManager(this);
+    this.isScrolling = false; // Track if scrolling is in progress
+    this.startPoint = null; // Starting point for drag selection
+    
     // Marching ants properties
     this.marchingAntsActive = false;
     this.dashOffset = 0;
     this.animationFrameId = null;
+
+    this.spreadsheetManager = new SpreadsheetManager(this);
+    this.cellUtility = new CellUtility(sheetRenderer, this.spreadsheetManager); // Instantiate CellUtility
+    this.copyPasteManager = new CopyPasteManager(this, this.spreadsheetManager);
+    this.calculationManager = new CalculationManager(this);
     this.setupEventListeners();
   }
 
+  /**
+   * Set up event listeners for user interactions with the spreadsheet.
+   */
   setupEventListeners() {
     const canvas = this.sheetRenderer.canvases.spreadsheet;
     canvas.addEventListener("pointerdown", this.handlePointerDown.bind(this));
@@ -30,6 +41,10 @@ export class CellFunctionality {
     // document.addEventListener("mousedown", this.handleMouseDown.bind(this));
   }
 
+  /**
+   * Handle the pointer down event for cell selection and drag initiation.
+   * @param {PointerEvent} event - The pointer event triggered on user action.
+   */
   handlePointerDown(event) {
     event.preventDefault();
     this.handleCellClick(event);
@@ -47,6 +62,10 @@ export class CellFunctionality {
     }
   }
 
+  /**
+   * Handle pointer movement during drag operation.
+   * @param {PointerEvent} event - The pointer event triggered on movement.
+   */
   handlePointerMove(event) {
     if (this.isDragging) {
       const currentPoint = this.cellUtility.getCanvasCoordinates(event);
@@ -55,6 +74,10 @@ export class CellFunctionality {
     }
   }
 
+  /**
+   * Handle the pointer up event when the drag operation ends.
+   * @param {PointerEvent} event - The pointer event triggered on user action.
+   */
   handlePointerUp(event) {
     this.isScrolling = false;
     this.removeEventListeners();
@@ -64,6 +87,10 @@ export class CellFunctionality {
     }
   }
 
+  /**
+   * Handle keyboard shortcuts for cut and deselection.
+   * @param {KeyboardEvent} event - The keyboard event triggered on key press.
+   */
   handleKeyDown(event) {
     if (event.ctrlKey && event.key === 'x' && this.selectedCell) {
       this.startMarchingAnts();
@@ -73,6 +100,9 @@ export class CellFunctionality {
   }
   }
 
+  /**
+   * Deselect the currently selected cells and hide the input element.
+   */
   deselectCurrentCells() {
     if (this.selectedCells.length > 0) {
         this.selectedCells = [];
@@ -83,7 +113,10 @@ export class CellFunctionality {
     }
 }
   
-
+  /**
+   * Handle a cell click event to select or deselect a cell.
+   * @param {PointerEvent} event - The pointer event triggered on user action.
+   */
   handleCellClick(event) {
     if (this.isDragging) return; // Prevent handling cell click if dragging
     const rect = this.sheetRenderer.canvases.spreadsheet.getBoundingClientRect();
@@ -110,6 +143,11 @@ export class CellFunctionality {
     }
   }
 
+  /**
+   * Update the selected cells during a drag selection.
+   * @param {Object} endPoint - The coordinates of the end point of the selection.
+   * @param {Boolean} [found=false] - Optional flag to indicate if the start point should be updated.
+   */
   updateSelectedCells(endPoint,found = false) {
     if (found){
       this.startPoint = endPoint;
@@ -129,6 +167,10 @@ export class CellFunctionality {
     );
   }
 
+  /**
+   * Handle scrolling when the pointer is near the edges of the canvas.
+   * @param {PointerEvent} event - The pointer event triggered on movement.
+   */
   handleScrolling(event) {
     const { x, y } = this.cellUtility.getCanvasCoordinates(event);
     const { x: scrollX, y: scrollY } =
@@ -160,73 +202,10 @@ export class CellFunctionality {
     this.updateInputElement(this.clickedCell)
   }
 
-  // handleScrolling(event) {
-  //   const edgeDistance = 30; // Distance from the edge to start scrolling
-  //   const scrollSpeed = 20; // The amount to scroll by
-  //   let scrollTimeout; // Timeout variable to manage delays
-  //   const scrollIfNearEdge = () => {
-  //     const { x, y } = this.cellUtility.getCanvasCoordinates(event);
-  //     const { x: scrollX, y: scrollY } = this.sheetRenderer.scrollManager.getScroll();
-  //     const canvas = this.sheetRenderer.canvases.spreadsheet;
-  //     console.log(x,y,scrollX,scrollY,canvas.clientHeight)
-  
-  //     let scrollXAmount = 0;
-  //     let scrollYAmount = 0;
-  
-  //     // Check if the mouse is inside the canvas
-  //     const isMouseInsideCanvas = (
-  //         x - scrollX > 0 && 
-  //         x - scrollX < canvas.clientWidth &&
-  //         y - scrollY > 0 &&
-  //         y - scrollY < canvas.clientHeight 
-  //     );
-  
-  //     // Stop scrolling if the mouse is inside the canvas
-  //     if (isMouseInsideCanvas) {
-  //         console.log("tjl;")
-  //         this.isScrolling = false;
-  //         clearTimeout(scrollTimeout); // Stop any ongoing scrolling
-  //         return; // Exit the function if mouse is inside the canvas
-  //     }
-  
-  //     // Check for horizontal scrolling
-  //     if (x - scrollX < edgeDistance ) {
-  //         scrollXAmount = -scrollSpeed; // Scroll left
-  //     } else if (x - scrollX > canvas.clientWidth - edgeDistance) {
-  //         scrollXAmount = scrollSpeed; // Scroll right
-  //     }
-  
-  //     // Check for vertical scrolling
-  //     if (y - scrollY < edgeDistance ) {
-  //         scrollYAmount = -scrollSpeed; // Scroll up
-  //     } else if (y - scrollY > canvas.clientHeight - edgeDistance) {
-  //         scrollYAmount = scrollSpeed; // Scroll down
-  //     }
-  
-  //     // Scroll if needed and if dragging
-  //     if ((scrollXAmount !== 0 || scrollYAmount !== 0) && this.isDragging && this.isScrolling) {
-  //         this.sheetRenderer.scrollManager.scroll(scrollXAmount, scrollYAmount);
-  
-  //         // Clear the previous timeout to prevent stack overflow
-  //         clearTimeout(scrollTimeout);
-  
-  //         // Continue scrolling after a delay if the mouse is still near the edge
-  //         scrollTimeout = setTimeout(scrollIfNearEdge, 100); // Adjust delay as needed
-  //     } 
-  // };
-  
-
-//     // If we're not already scrolling, start the scrolling loop
-//     if (!this.isScrolling) {
-//         scrollIfNearEdge();
-//     }
-
-//     this.updateInputElement(this.clickedCell);
-// }
-
-
-
-
+  /**
+   * Update the input element for the currently selected cell.
+   * @param {Object} cell - The selected cell object.
+   */
   updateInputElement(cell) {
     this.input = document.getElementById(
       `input_${this.sheetRenderer.sheet.row}_${this.sheetRenderer.sheet.col}_${this.sheetRenderer.sheet.index}`
@@ -273,6 +252,9 @@ export class CellFunctionality {
     }
   }
 
+  /**
+   * Hide the input element on the spreadsheet.
+   */
   hideInputElement() {
     const input =document.getElementById(
       `input_${this.sheetRenderer.sheet.row}_${this.sheetRenderer.sheet.col}_${this.sheetRenderer.sheet.index}`
@@ -282,11 +264,17 @@ export class CellFunctionality {
     }
   }
 
+  /**
+   * Start the marching ants animation around the selected cells.
+   */
   startMarchingAnts() {
     this.marchingAntsActive = true;
     this.animateMarchingAnts();
   }
 
+  /**
+   * Stop the marching ants animation.
+   */
   stopMarchingAnts() {
     this.marchingAntsActive = false;
     if (this.animationFrameId) {
@@ -294,6 +282,9 @@ export class CellFunctionality {
     }
   }
 
+  /**
+   * Animate the marching ants effect.
+   */
   animateMarchingAnts() {
     if (!this.marchingAntsActive) return;
   
@@ -322,6 +313,9 @@ export class CellFunctionality {
   }
 
 
+  /**
+   * Draw a highlight or border around the selected cells.
+   */
   drawHighlight() {
     const ctx = this.sheetRenderer.contexts.spreadsheet;
     const { x: scrollX, y: scrollY } =
@@ -422,6 +416,9 @@ export class CellFunctionality {
     this.sheetRenderer.draw(); // Redraw the entire sheet to show/hide the highlight
   }
 
+  /**
+   * Remove event listeners to prevent memory leaks.
+   */
   removeEventListeners() {
     const canvas = this.sheetRenderer.canvases.spreadsheet;
     canvas.removeEventListener("pointerdown", this.handlePointerDown);
@@ -429,6 +426,3 @@ export class CellFunctionality {
     document.removeEventListener("pointermove", this.handlePointerMove);
   }
 }
-
-
-
