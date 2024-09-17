@@ -286,5 +286,17 @@ class HeaderCell {
         return this.customVerticalSizes.get(index) || this.baseCellHeight * this.scale;
       }
     }
+
+    getCellpos(type, index) {
+      if (type === "horizontal") {
+      return (
+          this.horizontalHeaderCells[index]?.x
+      );
+      } else {
+      return (
+          this.verticalHeaderCells[index]?.y
+      );
+      }
+    }
   }
   

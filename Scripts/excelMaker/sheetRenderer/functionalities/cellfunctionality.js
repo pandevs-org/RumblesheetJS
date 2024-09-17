@@ -1,7 +1,7 @@
 import { SpreadsheetManager } from "./spreadsheetmanager.js";
 import { CopyPasteManager } from './copyPasteManager/copypastemanger.js';
 import { CellUtility } from "./cellutility.js"; // Import the CellUtility class
-import { CalculationManager } from "./CalculationManager.js";
+import { CalculationManager } from "./calculationManager.js";
 
 export class CellFunctionality {
   constructor(sheetRenderer) {
@@ -111,7 +111,6 @@ export class CellFunctionality {
   }
 
   updateSelectedCells(endPoint,found = false) {
-    console.log(endPoint)
     if (found){
       this.startPoint = endPoint;
     }

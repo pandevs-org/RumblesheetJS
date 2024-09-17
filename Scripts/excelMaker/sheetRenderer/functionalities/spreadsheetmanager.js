@@ -1,10 +1,13 @@
+import { FormulaParser } from './fParser.js'
+
 export class SpreadsheetManager {
     constructor(cellFunctionality) {
         this.cellFunctionality = cellFunctionality;
         this.sheetRenderer = this.cellFunctionality.sheetRenderer;
         this.sparseMatrix = this.cellFunctionality.sheetRenderer.sparseMatrix;
-      
 
+        this.FormulaParser = new FormulaParser(this.sparseMatrix);
+      
         // Attach event listener to input element to update SparseMatrix on input change
         this.setupInputEventListener();
     }
@@ -64,7 +67,7 @@ export class SpreadsheetManager {
     }
 
     getValue(row, column) {
-        return this.sparseMatrix.getCellvalue(row, column);
+        return this.FormulaParser.evaluateFormula(this.sparseMatrix.getCellvalue(row, column));
     }
     getCell(row, column) {
         return this.sparseMatrix.getCell(row, column);
