@@ -1,4 +1,4 @@
-import { Emaker } from './Emaker/eMaker.js';
+import { Emaker } from './excelMaker/eMaker.js';
 
 /**
  * Represents an Excel-like grid component.

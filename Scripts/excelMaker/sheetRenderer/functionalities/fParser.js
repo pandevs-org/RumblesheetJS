@@ -5,6 +5,7 @@ export class FormulaParser {
 
     // Function to parse and evaluate the formula
     evaluateFormula(formula) {
+        if(!formula) return ;
         if (!formula.startsWith("=")) return formula; // Only process formulas that start with "="
         
         // Remove the "=" sign
@@ -47,7 +48,7 @@ export class FormulaParser {
         let sum = 0;
         for (let row = start.row; row <= end.row; row++) {
             for (let col = start.col; col <= end.col; col++) {
-                const value = this.matrix.getCellvalue(row, col);
+                const value = this.matrix.getCellvalue(row+1, col+1);
                 sum += (value ? parseFloat(value) : 0);
             }
         }

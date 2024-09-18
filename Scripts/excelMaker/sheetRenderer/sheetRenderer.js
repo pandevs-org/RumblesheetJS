@@ -1,5 +1,5 @@
 // sheetrenderer.js
-import { HeaderCellManager } from "../cellMaker.js";
+import { HeaderCellManager } from "../dataStructure/headerCellStructure.js";
 import { Scroll } from "./functionalities/scroll.js";
 import { CellFunctionality } from "./functionalities/cellfunctionality.js";
 import { Graph } from "./functionalities/graph.js";
@@ -46,6 +46,7 @@ export class SheetRenderer {
     this.resizeObserver.observe(this.canvases.spreadsheet);
     this.scrollManager = new Scroll(this);
     this.cellFunctionality = new CellFunctionality(this);
+    this.spreedsheetmanager = this.cellFunctionality.spreadsheetManager;
     this.headerCellFunctionality = new HeaderCellFunctionality(this);
     this.graph = new Graph(this);
     this.search = document.getElementById('search');
@@ -632,7 +633,7 @@ adjustRowPosition(targetRow,targetColumnIndex) {
              
   
               // Draw centered text in the cell
-              this.drawCenteredTextforsparse(ctx,current, this.sparseMatrix.FormulaParser.evaluateFormula(current.value),
+              this.drawCenteredTextforsparse(ctx,current, this.cellFunctionality.spreadsheetManager.FormulaParser.evaluateFormula(current.value),
                 cellX + hCell.width / 2, cellY + vCell.height / 2,
                 hCell.width, vCell.height
               );

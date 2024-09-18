@@ -1,5 +1,6 @@
-import { SheetRenderer } from './sheetRenderer/SheetRenderer.js'; // Adjust the path if necessary
-import { SparseMatrix } from './ds.js';
+import { SparseMatrix } from './dataStructure/sparseMatrixStructure.js';
+import { SheetRenderer } from './sheetRenderer/sheetRenderer.js'; // Adjust the path if necessary
+
 
 
 /**
