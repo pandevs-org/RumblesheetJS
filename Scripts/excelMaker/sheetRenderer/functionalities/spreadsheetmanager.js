@@ -1,4 +1,4 @@
-import { FormulaParser } from './fParser.js'
+import { FormulaParser } from './formulaParser.js'
 
 export class SpreadsheetManager {
     constructor(cellFunctionality) {

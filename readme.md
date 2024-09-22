@@ -1,5 +1,5 @@
 <h2 align="center">
-  Rumblestrip<br/>
+  RumblesheetJS<br/>
 </h2>
 
 ## Table of Contents
@@ -66,7 +66,7 @@ exceljs/
                 │── calculationManager.js
                 │── cellFunctionality.js
                 │── cellUtility.js
-                │── fParser.js
+                │── formulaParser.js
                 │── graph.js
                 │── headerCellFunctionalities.js
                 │── scroll.js
@@ -993,6 +993,207 @@ exceljs/
     <tr>
         <td>removeEventListeners()</td>
         <td>Remove event listeners to prevent memory leaks</td>
+    </tr>
+  </tbody>
+</table>
+
+</details>
+
+
+### `4.3 cellUtlity.js`
+
+<details> <summary><b>cellUtility.js</b></summary>
+
+#### `class CellUtility` - Utility class for handling cell operations in a spreadsheet
+
+<table>
+  <thead>
+    <tr>
+        <th>Properties</th>
+        <th>Description
+    </tr>  
+  </thead>
+  <tbody>
+    <tr>
+        <td>sheetRenderer</td>
+        <td>The renderer responsible for rendering the spreadsheet</td>
+    </tr>
+    <tr>
+        <td>spreadsheetManager</td>
+        <td>The manager for spreadsheet data</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+        <th>Methods</th>
+        <th>Description
+    </tr>  
+  </thead>
+  <tbody>
+    <tr>
+        <td>getCellFromCoordinates()</td>
+        <td>Get the cell corresponding to the given x and y coordinates</td>
+    </tr>
+    <tr>
+        <td>getCanvasCoordinates()</td>
+        <td>Get the canvas coordinates from the mouse event</td>
+    </tr>
+    <tr>
+        <td>letterToNumber()</td>
+        <td>Convert a column letter to a column number</td>
+    </tr>
+    <tr>
+        <td>getCellsFromRect()</td>
+        <td>Get all cells within a rectangular area defined by two points</td>
+    </tr>
+        <tr>
+        <td>binarySearch()</td>
+        <td>Perform a binary search on the cells array</td>
+    </tr>
+  </tbody>
+</table>
+
+</details>
+
+
+### `4.4 forumulaParser.js`
+
+<details> <summary><b>formulaParser.js</b></summary>
+
+#### `class FormulaParser` - Class to parse and evaluate spreadsheet formulas
+
+<table>
+  <thead>
+    <tr>
+        <th>Properties</th>
+        <th>Description
+    </tr>  
+  </thead>
+  <tbody>
+    <tr>
+        <td>matrix</td>
+        <td>Reference to the SparseMatrix containing spreadsheet data</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+        <th>Methods</th>
+        <th>Description
+    </tr>  
+  </thead>
+  <tbody>
+    <tr>
+        <td>evaluateFormula()</td>
+        <td>Parse and evaluate the formula</td>
+    </tr>
+    <tr>
+        <td>getCellPosition()</td>
+        <td>Convert a cell reference (e.g., A1) into row and column indices</td>
+    </tr>
+    <tr>
+        <td>extractRange()</td>
+        <td>Utility function to extract the range from a formula (e.g., "A1:B4" from "SUM(A1:B4)")</td>
+    </tr>
+    <tr>
+        <td>getRangePosition()</td>
+        <td>Extract the start and end positions from a range (e.g., A1:B4)</td>
+    </tr>
+    <tr>
+        <td>handleSum()</td>
+        <td>Handle SUM function by calculating the sum of values in a range</td>
+    </tr>
+    <tr>
+        <td>handleMin()</td>
+        <td>Handle MIN function by finding the minimum value in a range</td>
+    </tr>
+    <tr>
+        <td>handleMax()</td>
+        <td>Handle MAX function by finding the maximum value in a range</td>
+    </tr>
+    <tr>
+        <td>handleAverage()</td>
+        <td>Handle AVERAGE function by calculating the average of values in a range</td>
+    </tr>
+  </tbody>
+</table>
+
+</details>
+
+
+### `4.5 graph.js`
+
+<details> <summary><b>graph.js</b></summary>
+
+#### `class Graph` - Class responsible for generating and managing graphs based on selected cells in a spreadsheet
+
+<table>
+  <thead>
+    <tr>
+        <th>Properties</th>
+        <th>Description
+    </tr>  
+  </thead>
+  <tbody>
+    <tr>
+        <td>sheetRenderer</td>
+        <td>Reference to the sheet renderer, containing canvas and cell functionality</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+        <th>Methods</th>
+        <th>Description
+    </tr>  
+  </thead>
+  <tbody>
+    <tr>
+        <td>init()</td>
+        <td>Initialize event listeners for graph buttons and handle user interactions</td>
+    </tr>
+    <tr>
+        <td>handleEvents()</td>
+        <td>Handles the events related to dragging and mouse interactions for the graph window</td>
+    </tr>
+    <tr>
+        <td>print()</td>
+        <td>Collects and organizes selected cells from the spreadsheet for graphing</td>
+    </tr>
+    <tr>
+        <td>getGraphValue()</td>
+        <td>Generates the values and labels required to plot the graph based on selected cells</td>
+    </tr>
+    <tr>
+        <td>isHorizantalSizeBigger()</td>
+        <td>Determines whether the horizontal size (number of columns) is larger than the vertical size (number of rows)</td>
+    </tr>
+    <tr>
+        <td>destroyGraph()</td>
+        <td>Destroys the current graph if it exists</td>
+    </tr>
+    <tr>
+        <td>drawBarGraph()</td>
+        <td>Draws a bar graph based on the selected cell data</td>
+    </tr>
+    <tr>
+        <td>drawLineGraph()</td>
+        <td>Draws a line graph based on the selected cell data</td>
+    </tr>
+    <tr>
+        <td>drawPieGraph()</td>
+        <td>Draws a pie chart based on the selected cell data</td>
+    </tr>
+        <tr>
+        <td>dragChart()</td>
+        <td>Handles dragging of the graph window</td>
     </tr>
   </tbody>
 </table>
