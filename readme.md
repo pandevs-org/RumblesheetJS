@@ -68,7 +68,7 @@ exceljs/
                 │── cellUtility.js
                 │── formulaParser.js
                 │── graph.js
-                │── headerCellFunctionalities.js
+                │── headerCellFunctionality.js
                 │── scroll.js
                 │── spreadsheetManager.js
                 └── copyPasteManager
@@ -391,6 +391,9 @@ exceljs/
 </table>
 
 </details>
+
+### `2.2 ribbonMaker.js`
+
 
 ### `3.1.1 headerCellStructure.js`
 
@@ -1195,6 +1198,378 @@ exceljs/
         <td>dragChart()</td>
         <td>Handles dragging of the graph window</td>
     </tr>
+  </tbody>
+</table>
+
+</details>
+
+
+### `4.6 headerCellFunctionality.js`
+
+<details> <summary><b>headerCellFuctionalities.js</b></summary>
+
+#### `class HeaderCellFunctionality` - Handles the functionality of header cells, such as resizing, selecting, and context menu actions
+
+<table>
+  <thead>
+    <tr>
+        <th>Properties</th>
+        <th>Description
+    </tr>  
+  </thead>
+  <tbody>
+    <tr>
+        <td>sheetRenderer</td>
+        <td>Reference to the sheet renderer, containing canvas and cell functionality</td>
+    </tr>
+        <tr>
+        <td>cellFunctionality</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>resizeThreshold</td>
+        <td>pixels from the edge to trigger resize</td>
+    </tr>
+    <tr>
+        <td>isResizing</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>resizeStart</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>resizeType</td>
+        <td>'row' or 'column'</td>
+    </tr>
+    <tr>
+        <td>resizeIndex</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>currentResizePosition</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>isheaderSelection</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>isSelecting</td>
+        <td>Track if user is selecting</td>
+    </tr>
+    <tr>
+        <td>selectedRowIndex</td>
+        <td>Single selected row</td>
+    </tr>
+    <tr>
+        <td>selectedColIndex</td>
+        <td>Single selected column</td>
+    </tr>
+    <tr>
+        <td>selectedCellsRange</td>
+        <td>Range selection for drag</td>
+    </tr>
+    <tr>
+        <td>isDraggingForSelection</td>
+        <td>Track drag for multi-selection</td>
+    </tr>
+
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+        <th>Methods</th>
+        <th>Description
+    </tr>  
+  </thead>
+  <tbody>
+    <tr>
+        <td>setupEventListeners()</td>
+        <td>Sets up the event listeners for canvas and window interactions</td>
+    </tr>
+    <tr>
+        <td>handleRightClick()</td>
+        <td>Handles right-click context menu actions for adding or deleting rows/columns</td>
+    </tr>
+    <tr>
+        <td>handleContextMenuAction()</td>
+        <td>Performs the action based on the selected context menu option</td>
+    </tr>
+    <tr>
+        <td>handleHeaderSelection()</td>
+        <td>Handles the header selection based on user clicks or drags</td>
+    </tr>
+    <tr>
+        <td>handleDragForSelection()</td>
+        <td>Handles mouse movement for drag-based header selection</td>
+    </tr>
+    <tr>
+        <td>handleMouseUp()</td>
+        <td>Handles mouse-up events, ending resizing or dragging operations</td>
+    </tr>
+    <tr>
+        <td>drawHeaderSelection()</td>
+        <td>Draws the header selection and clears previously selected cells</td>
+    </tr>
+    <tr>
+        <td>redrawHeaders()</td>
+        <td>Redraws the headers for both horizontal and vertical axes</td>
+    </tr>
+    <tr>
+        <td>highlightRange()</td>
+        <td>Highlights the selected range of header cells in either the horizontal or vertical direction</td>
+    </tr>
+        <tr>
+        <td>getfullClickedHeaderCell()</td>
+        <td>Retrieves the full clicked header cell based on the provided position</td>
+    </tr>
+    <tr>
+        <td>getClickedHeaderCell()</td>
+        <td>Returns the index of the clicked header cell based on position</td>
+    </tr>
+    <tr>
+        <td>getResizeEdge()</td>
+        <td>Determines whether the mouse is near the edge of a header cell for resizing</td>
+    </tr>
+        <tr>
+        <td>handleDragForShifting()</td>
+        <td>Handles the dragging of rows or columns for shifting</td>
+    </tr>
+    <tr>
+        <td>handleMouseMove()</td>
+        <td>Handles mouse movement to update the cursor for resizing or dragging</td>
+    </tr>
+    <tr>
+        <td>handleMouseDown()</td>
+        <td>Handles mouse down event on header cells to initiate dragging, resizing, or selection</td>
+    </tr>
+        <tr>
+        <td>handleDrag()</td>
+        <td>Handles dragging action during resize or selection</td>
+    </tr>
+    <tr>
+        <td>applyResize()</td>
+        <td>Applies the resize changes after the user has finished resizing a header cell</td>
+    </tr>
+        <tr>
+        <td>removeEventListeners()</td>
+        <td>Removes event listeners from the canvas and document to prevent memory leaks</td>
+    </tr>
+  </tbody>
+</table>
+
+</details>
+
+
+### `4.7 scroll.js`
+
+<details> <summary><b>scroll.js</b></summary>
+
+#### `class Scroll` - The Scroll class handles scrolling functionality within a spreadsheet
+
+<table>
+  <thead>
+    <tr>
+        <th>Properties</th>
+        <th>Description
+    </tr>  
+  </thead>
+  <tbody>
+    <tr>
+        <td>sheetRenderer</td>
+        <td>Reference to the sheet renderer, containing canvas and cell functionality</td>
+    </tr>
+        <tr>
+        <td>scrollX</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>scrollY</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>maxScrollX</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>maxScrollY</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>isDragging</td>
+        <td>'row' or 'column'</td>
+    </tr>
+    <tr>
+        <td>isScrollbarDragging</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>lastMouseX</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>lastMouseY</td>
+        <td></td>
+    </tr>
+
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+        <th>Methods</th>
+        <th>Description
+    </tr>  
+  </thead>
+  <tbody>
+    <tr>
+        <td>setupEventListeners()</td>
+        <td>Sets up event listeners for scrolling and resizing actions</td>
+    </tr>
+    <tr>
+        <td>handleScrollBarMouseDown()</td>
+        <td>Handles the mousedown event on scroll bars to initiate dragging</td>
+    </tr>
+    <tr>
+        <td>handleMouseMove()</td>
+        <td>Handles the mousemove event to perform scrolling or scroll bar dragging</td>
+    </tr>
+    <tr>
+        <td>handleMouseUp()</td>
+        <td>Handles the mouseup event to end dragging actions</td>
+    </tr>
+    <tr>
+        <td>handleWheel()</td>
+        <td>Handles the wheel event for zooming or scrolling</td>
+    </tr>
+    <tr>
+        <td>handleMouseDown()</td>
+        <td>Handles the mousedown event to initiate dragging</td>
+    </tr>
+    <tr>
+        <td>updateMaxScroll()</td>
+        <td>Updates the maximum scroll values based on content and viewport dimensions</td>
+    </tr>
+    <tr>
+        <td>updateScrollBars()</td>
+        <td>Updates the appearance of scroll bars based on current scroll position</td>
+    </tr>
+    <tr>
+        <td>scroll()</td>
+        <td>Scrolls the content by the given delta values</td>
+    </tr>
+    <tr>
+        <td>checkScrollPosition()</td>
+        <td>Checks if the scroll position has reached a threshold to expand content</td>
+    </tr>
+    <tr>
+        <td>expandContent()</td>
+        <td>Expands content based on the scroll direction and updates scroll bars</td>
+    </tr>
+    <tr>
+        <td>getScroll()</td>
+        <td>Gets the current scroll position</td>
+    </tr>
+    <tr>
+        <td>destroy()</td>
+        <td>Cleans up resources and removes event listener</td>
+    </tr>
+    <tr>
+        <td>handleMouseDown()</td>
+        <td>Handles mouse down event on header cells to initiate dragging, resizing, or selection</td>
+    </tr>
+        <tr>
+        <td>handleDrag()</td>
+        <td>Handles dragging action during resize or selection</td>
+    </tr>
+    <tr>
+        <td>applyResize()</td>
+        <td>
+    </tr>
+  </tbody>
+</table>
+
+</details>
+
+### `4.8 spreadsheetManager.js`
+
+<details> <summary><b>spreadsheetManager.js</b></summary>
+
+#### `class SpreadsheetManager` - Manages spreadsheet operations such as handling cell input, updating the sparse matrix, and evaluating formulas within a grid
+
+<table>
+  <thead>
+    <tr>
+        <th>Properties</th>
+        <th>Description
+    </tr>  
+  </thead>
+  <tbody>
+    <tr>
+        <td>cellFunctionality</td>
+        <td>Object containing the cell functionality including sheet renderer and selected cell</td>
+    </tr>
+        <tr>
+        <td>sheetRenderer</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>sparseMatrix</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>FormulaParser</td>
+        <td></td>
+    </tr>
+
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+        <th>Methods</th>
+        <th>Description
+    </tr>  
+  </thead>
+  <tbody>
+    <tr>
+        <td>setupInputEventListener()</td>
+        <td>Sets up event listeners for the input element related to cell changes</td>
+    </tr>
+    <tr>
+        <td>handleInputChange()</td>
+        <td>Handles changes in the input value and updates the sparse matrix</td>
+    </tr>
+    <tr>
+        <td>handleKeyDown()</td>
+        <td>Handles the keydown event, allowing the Enter key to finalize cell editing</td>
+    </tr>
+    <tr>
+        <td>handleInputBlur()</td>
+        <td>Handles when the input loses focus (blur event) and finalizes the cell value</td>
+    </tr>
+    <tr>
+        <td>updateCellValue()</td>
+        <td>Updates the value of the selected cell in the sparse matrix</td>
+    </tr>
+    <tr>
+        <td>getValue()</td>
+        <td>Retrieves the value of a cell and evaluates any formulas</td>
+    </tr>
+    <tr>
+        <td>getCell()</td>
+        <td>Retrieves the raw cell data from the sparse matrix</td>
+    </tr>
+    <tr>
+        <td>letterToNumber()</td>
+        <td>Converts a column letter (e.g., 'A', 'B', 'AA') to a corresponding number</td>
+    </tr>
+    
   </tbody>
 </table>
 

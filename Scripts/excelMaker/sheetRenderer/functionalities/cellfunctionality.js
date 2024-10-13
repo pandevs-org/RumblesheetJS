@@ -1,5 +1,5 @@
 import { SpreadsheetManager } from "./spreadsheetmanager.js";
-import { CopyPasteManager } from './copyPasteManager/copypastemanger.js';
+import { CopyPasteManager } from './copyPasteManager/copypasteManger.js';
 import { CellUtility } from "./cellUtility.js"; // Import the CellUtility class
 import { CalculationManager } from "./calculationManager.js";
 

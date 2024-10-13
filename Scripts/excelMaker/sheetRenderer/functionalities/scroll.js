@@ -1,3 +1,8 @@
+/**
+ * The Scroll class handles scrolling functionality within a spreadsheet
+ * @class
+ */
+
 export class Scroll {
     /**
      * Creates an instance of the Scroll class.
