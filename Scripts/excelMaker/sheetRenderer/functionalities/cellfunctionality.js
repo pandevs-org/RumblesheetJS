@@ -1,7 +1,7 @@
 import { SpreadsheetManager } from "./spreadsheetmanager.js";
-import { CopyPasteManager } from './copyPasteManager/copypasteManger.js';
 import { CellUtility } from "./cellUtility.js"; // Import the CellUtility class
 import { CalculationManager } from "./calculationManager.js";
+import { CopyPasteManager } from "./copyPasteManager/copypasteManager.js";
 
 /**
  * Class responsible for managing cell interactions and functionality in the spreadsheet.

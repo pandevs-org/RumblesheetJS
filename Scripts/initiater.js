@@ -1,4 +1,5 @@
 import { Emaker } from './excelMaker/eMaker.js';
+import { RibbonMaker } from './excelMaker/ribbonMaker.js';
 
 /**
  * Represents an Excel-like grid component.
@@ -358,11 +359,14 @@ class GridMaker {
  * Initialize the grid maker.
  * @param {HTMLElement} mainContainer - The main container for the grid.
  */
-function init(mainContainer) {
+function init(ribbonContainer, mainContainer) {
+    new RibbonMaker(ribbonContainer);
     new GridMaker(mainContainer, 3, 3);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    const ribbonContainer = document.getElementById("ribbon-container")
     const mainContainer = document.getElementById("mainContainer");
-    init(mainContainer);
+    
+    init(ribbonContainer, mainContainer);
 });

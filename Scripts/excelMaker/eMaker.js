@@ -1,8 +1,6 @@
 import { SparseMatrix } from './dataStructure/sparseMatrixStructure.js';
 import { SheetRenderer } from './sheetRenderer/sheetRenderer.js'; // Adjust the path if necessary
 
-
-
 /**
  * Represents a spreadsheet sheet.
  */
