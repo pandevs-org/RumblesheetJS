@@ -1606,7 +1606,7 @@ git commit -m 'Add some AmazingFeature'
 Push the code changes in your branch.
 
 ```bash
-git push origin TE/name
+git push origin dev/name
 ```
 
 ### 4. **Open a Pull Request**
