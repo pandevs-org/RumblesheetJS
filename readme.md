@@ -48,34 +48,56 @@
 
 ### Directory Structure
 ```
-exceljs/
+RumbleSheet/
 ├── index.html
-├── Styles
-│   └── style.scss
-└── Scripts
-    │── initiator.js
-    └── excelMaker
-        │── eMaker.js
-        │── ribbonMaker.js
-        │── dataStructure
-        │    │── headerCellStructure.js
-        │    └── sparseMatrixStructure.js
-        └── sheetRenderer
-            │── sheetRenderer.js
-            └── functionalities
-                │── calculationManager.js
-                │── cellFunctionality.js
-                │── cellUtility.js
-                │── formulaParser.js
-                │── graph.js
-                │── headerCellFunctionality.js
-                │── scroll.js
-                │── spreadsheetManager.js
-                └── copyPasteManager
-                    │── _dataProcessor(worker)
-                    └── copyPasteManager.js
-
+├── assets/
+│   ├── locales/
+│   │   └── en-us.json
+│   ├── styles/
+│   │   └── main.css
+│   └── images/
+│       └── logo.png
+├── src/
+│   ├── core/
+│   │   ├── initiator.ts
+│   │   └── eventManager.ts
+│   ├── excel/
+│   │   ├── excel.ts
+│   │   ├── components/
+│   │   │   ├── sheetRenderer.ts
+│   │   │   ├── helper.ts
+│   │   │   └── scroll.ts
+│   │   ├── feature/
+│   │   │   ├── cellFunctionality/
+│   │   │   │   └── *.ts
+│   │   │   └── headerCellFunctionality/
+│   │   │       └── *.ts
+│   │   ├── plugins/
+│   │   │   └── graph/
+│   │   │   │   └── *.ts
+│   │   │   └── file/
+│   │   │       └── *.ts
+│   │   ├── ribbon/
+│   │   │   ├── ribbon.js
+│   │   │   ├── tooltipManager.ts
+│   │   │   └── customTooltip.ts
+│   │   ├── theme/
+│   │   │   └── themeManager.ts
+│   │   └── dataStructures/
+│   │       └── sparseMatrix.ts
+│   └── tests/
+│       ├── core/
+│       └── excel/
+│           ├── components/
+│           ├── functionality/
+│           ├── plugins/
+│           ├── ribbon/
+│           └── theme/
+└── README.md
 ```
+
+<details> <summary><b>expand</b></summary>
+
 
 ### `1.0 initiator.js`
 
@@ -1572,6 +1594,8 @@ exceljs/
     
   </tbody>
 </table>
+
+</details>
 
 </details>
 
