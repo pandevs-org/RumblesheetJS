@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/pandevs-org/RumblesheetJS/issues"
   },
-  "homepage": "https://github.com/pandevs-org/RumblesheetJS#readme"
+  "homepage": "https://github.com/pandevs-org/RumblesheetJS#readme",
+  "dependencies": {
+    "rumblesheetjs": "file:"
+  }
 }
