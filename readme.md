@@ -68,7 +68,7 @@ RumbleSheet/
 │   │   │   ├── helper.ts
 │   │   │   └── scroll.ts
 │   │   ├── feature/
-│   │   │   ├── cellFunctionality/
+│   │   │   ├── mainCellFunctionality/
 │   │   │   │   └── *.ts
 │   │   │   └── headerCellFunctionality/
 │   │   │       └── *.ts
